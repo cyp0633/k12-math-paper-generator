@@ -45,7 +45,7 @@ func GetUserByName(name string) (User, error) {
 	return User{}, errors.New("user not found")
 }
 
-func ChangeUserType(newType string) {
+func ChangeUserType(newType string) bool {
 	switch newType {
 	case "小学":
 		CurrentUser.AccountType = UserTypePrimarySchool
@@ -53,7 +53,10 @@ func ChangeUserType(newType string) {
 		CurrentUser.AccountType = UserTypeJuniorHigh
 	case "高中":
 		CurrentUser.AccountType = UserTypeSeniorHigh
+	default:
+		return false // 不合法的学习等级
 	}
+	return true // 修改成功
 }
 
 func ClearUser() {
