@@ -9,12 +9,12 @@ import (
 )
 
 // genNum 在 [0, max) 内生成一个随机数
-func genNum(max int) int {
-	val, err := rand.Int(rand.Reader, big.NewInt(int64(max)))
+func GenNum(min, max int) int {
+	val, err := rand.Int(rand.Reader, big.NewInt(int64(max-min)))
 	if err != nil {
 		log.Printf("生成随机数失败：%v", err)
 	}
-	return int(val.Int64())
+	return int(val.Int64()) + min
 }
 
 // genOp 生成一个符合等级的运算符
@@ -30,5 +30,5 @@ func genOp() int {
 	default:
 		return -1 // 不合法的学习等级
 	}
-	return genNum(maxLevel)
+	return GenNum(0, maxLevel)
 }

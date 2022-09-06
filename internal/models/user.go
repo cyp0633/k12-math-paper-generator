@@ -62,3 +62,7 @@ func ChangeUserType(newType string) bool {
 func ClearUser() {
 	CurrentUser = nil
 }
+
+func (a User) GetUserTypeText() string {
+	return AccountTypeText[a.AccountType]
+}
