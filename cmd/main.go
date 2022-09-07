@@ -60,27 +60,3 @@ func inputHandler() {
 		middleware.GetProblems(num)
 	}
 }
-
-// func getProblems() {
-// 	fmt.Printf("准备生成%v数学题目，请输入生成题目数量（输入-1将退出当前用户，重新登录）：\n", models.AccountTypeText[models.CurrentUser.AccountType])
-// 	var num int
-// 	var tmp string
-// 	fmt.Scanf("%s\n", &tmp)
-// 	matchChangeType, err := regexp.MatchString(`切换为..`, tmp) // 使用正则表达式判断是否切换用户类型
-// 	if err != nil {
-// 		log.Printf("正则表达式匹配错误：%v", err)
-// 	}
-// 	if matchChangeType {
-// 		models.ChangeUserType(tmp[:])
-// 		models.ClearUser()
-// 		getProblems()
-// 	}
-// 	fmt.Sscanf(tmp, "%d", &num)
-// 	if num == -1 {
-// 		models.ClearUser()
-// 		auth()        // 重新登录
-// 		getProblems() // 重新获取题目
-// 	} else {
-// 		return // TODO: 生成题目
-// 	}
-// }
