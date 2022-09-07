@@ -15,18 +15,22 @@ type Expression struct {
 	HasSeniorLevel bool        // 是否有高中难度运算
 }
 
+// 运算符。一元运算符统一只有右子表达式。
 const (
-	operatorAdd     = iota // 加法
-	operatorSub     = iota // 减法
-	operatorMul     = iota // 乘法
-	operatorDiv     = iota // 除法
-	operatorSqrt    = iota // 开方
-	operationSquare = iota // 平方
-	operationSin    = iota // 正弦
-	operationCos    = iota // 余弦
-	operationTan    = iota // 正切
-	operationNone   = -1   // 无运算符
+	operatorAdd    = iota // 加法
+	operatorSub    = iota // 减法
+	operatorMul    = iota // 乘法
+	operatorDiv    = iota // 除法
+	operatorSqrt   = iota // 开方
+	operatorSquare = iota // 平方
+	operatorSin    = iota // 正弦
+	operatorCos    = iota // 余弦
+	operatorTan    = iota // 正切
+	operatorNone   = -1   // 无运算符
 )
+
+// opPriority 运算符优先级。开方特别处理，因为 LaTeX 格式不能像平常一样加括号
+var opPriority = []int{1, 1, 2, 2, 0, 3, 4, 4, 4}
 
 // GenerateProblem 生成一个表达式树。
 // op 操作数
@@ -56,11 +60,11 @@ func GenerateProblem(op int) *Expression {
 		leftOpNum = GenNum(0, op)                       // 分配 0~op-1 个运算符给左子表达式
 		exp.Left = GenerateProblem(leftOpNum)           // 使用递归生成左子表达式
 		exp.Right = GenerateProblem(op - leftOpNum - 1) // 使用递归生成右子表达式
-	case operatorSqrt, operationSquare: // 一元运算符，初中难度
+	case operatorSqrt, operatorSquare: // 一元运算符，初中难度
 		exp.Left = nil
 		exp.Right = GenerateProblem(op - 1) // 使用递归生成右子表达式
 		exp.HasJuniorLevel = true
-	case operationSin, operationCos, operationTan: // 一元运算符，高中难度
+	case operatorSin, operatorCos, operatorTan: // 一元运算符，高中难度
 		exp.Left = nil
 		exp.Right = GenerateProblem(op - 1) // 使用递归生成右子表达式
 		exp.HasSeniorLevel = true
@@ -76,13 +80,13 @@ func GenerateProblem(op int) *Expression {
 		exp.Value = exp.Left.Value / exp.Right.Value
 	case operatorSqrt:
 		exp.Value = math.Sqrt(exp.Right.Value)
-	case operationSquare:
+	case operatorSquare:
 		exp.Value = exp.Right.Value * exp.Right.Value
-	case operationSin:
+	case operatorSin:
 		exp.Value = math.Sin(exp.Right.Value)
-	case operationCos:
+	case operatorCos:
 		exp.Value = math.Cos(exp.Right.Value)
-	case operationTan:
+	case operatorTan:
 		exp.Value = math.Tan(exp.Right.Value)
 	}
 	return &exp
@@ -90,33 +94,41 @@ func GenerateProblem(op int) *Expression {
 
 // GenerateProblemStr 对表达式树进行中序遍历，生成表达式字符串。
 func GenerateProblemStr(root *Expression) string {
-	var left, right string
+	left, right := "", ""
+	// 视情况为子表达式加括号（不再为自己加括号！）
 	if root.Left != nil {
 		left = GenerateProblemStr(root.Left)
+		if root.Left.Operator != -1 && opPriority[root.Left.Operator] < opPriority[root.Operator] {
+			left = "(" + left + ")"
+		}
 	}
 	if root.Right != nil {
 		right = GenerateProblemStr(root.Right)
+		if root.Right.Operator != -1 && opPriority[root.Right.Operator] < opPriority[root.Operator] {
+			right = "(" + right + ")"
+		}
 	}
+	// 连接左右表达式，并
 	switch root.Operator {
 	case operatorAdd:
-		return "(" + left + " + " + right + ")"
+		return "" + left + " + " + right + ""
 	case operatorSub:
-		return "(" + left + " - " + right + ")"
+		return "" + left + " - " + right + ""
 	case operatorMul:
-		return "(" + left + " * " + right + ")"
+		return "" + left + " * " + right + ""
 	case operatorDiv:
-		return "(" + left + " / " + right + ")"
+		return "" + left + " / " + right + ""
 	case operatorSqrt:
-		return "sqrt(" + right + ")"
-	case operationSquare:
-		return "(" + right + " ^ 2)"
-	case operationSin:
-		return "sin(" + right + ")"
-	case operationCos:
-		return "cos(" + right + ")"
-	case operationTan:
-		return "tan(" + right + ")"
-	case operationNone:
+		return "\\sqrt{" + right + "}" // LaTeX 格式
+	case operatorSquare:
+		return "" + right + " ^ 2"
+	case operatorSin:
+		return "sin(" + right + ""
+	case operatorCos:
+		return "cos" + right + ""
+	case operatorTan:
+		return "tan" + right + ""
+	case operatorNone:
 		return fmt.Sprintf("%v", root.Value)
 	}
 	return ""
