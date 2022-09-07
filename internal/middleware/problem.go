@@ -9,8 +9,11 @@ import (
 // num: 题目数量
 func GetProblems(num int) {
 	for i := 0; i < num; {
-		problem := models.GenerateProblem(models.GenNum(1, 6)) // 生成一个 1~5 个操作数的题目
-		problemStr := models.GenerateProblemStr(problem)       // 生成题目字符串
+		problem := models.GenerateProblem(models.GenNum(1, 6))
+		for problem.Level != models.CurrentUser.AccountType {
+			problem = models.GenerateProblem(models.GenNum(1, 6)) // 生成一个 1~5 个操作数的题目
+		}
+		problemStr := models.GenerateProblemStr(problem) // 生成题目字符串
 		fmt.Printf("%v\n", problemStr)
 		i++
 	}

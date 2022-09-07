@@ -7,12 +7,13 @@ import (
 
 // Expression 描述一个数学表达式节点。
 type Expression struct {
-	Left           *Expression // 左子表达式
-	Right          *Expression // 右子表达式
-	Operator       int         // 运算符
-	Value          float64     // 值
-	HasJuniorLevel bool        // 是否有初中难度运算
-	HasSeniorLevel bool        // 是否有高中难度运算
+	Left     *Expression // 左子表达式
+	Right    *Expression // 右子表达式
+	Operator int         // 运算符
+	Value    float64     // 值
+	// HasJuniorLevel bool        // 是否有初中难度运算
+	// HasSeniorLevel bool        // 是否有高中难度运算
+	Level int // 难度等级，与账户类型对应
 }
 
 // 运算符。一元运算符统一只有右子表达式。
@@ -29,8 +30,8 @@ const (
 	operatorNone   = -1   // 无运算符
 )
 
-// opPriority 运算符优先级。开方特别处理，因为 LaTeX 格式不能像平常一样加括号
-var opPriority = []int{1, 1, 2, 2, 0, 3, 4, 4, 4}
+// opPriority 运算符优先级。
+var opPriority = []int{1, 1, 2, 2, 3, 3, 4, 4, 4}
 
 // GenerateProblem 生成一个表达式树。
 // op 操作数
@@ -41,18 +42,23 @@ func GenerateProblem(op int) *Expression {
 	if op == 0 { // 表达式不含运算符，生成一个数字
 		exp.Left, exp.Right = nil, nil
 		exp.Operator = -1
-		exp.HasJuniorLevel, exp.HasSeniorLevel = false, false
+		// exp.HasJuniorLevel, exp.HasSeniorLevel = false, false
+		exp.Level = UserTypePrimarySchool
 		exp.Value = float64(GenNum(0, 101)) // 生成一个 0 到 100 的随机数
 		return &exp
 	}
 	// 确定该表达式的学习等级
 	if exp.Left != nil {
-		exp.HasJuniorLevel = exp.Left.HasJuniorLevel
-		exp.HasSeniorLevel = exp.Left.HasSeniorLevel
+		// exp.HasJuniorLevel = exp.Left.HasJuniorLevel
+		// exp.HasSeniorLevel = exp.Left.HasSeniorLevel
+		exp.Level = exp.Left.Level
 	}
 	if exp.Right != nil {
-		exp.HasJuniorLevel = exp.HasJuniorLevel || exp.Right.HasJuniorLevel
-		exp.HasSeniorLevel = exp.HasSeniorLevel || exp.Right.HasSeniorLevel
+		// exp.HasJuniorLevel = exp.HasJuniorLevel || exp.Right.HasJuniorLevel
+		// exp.HasSeniorLevel = exp.HasSeniorLevel || exp.Right.HasSeniorLevel
+		if exp.Level < exp.Right.Level {
+			exp.Level = exp.Right.Level
+		}
 	}
 	exp.Operator = genOp()
 	switch exp.Operator { // 根据运算符的不同，生成不同的表达式
@@ -63,11 +69,17 @@ func GenerateProblem(op int) *Expression {
 	case operatorSqrt, operatorSquare: // 一元运算符，初中难度
 		exp.Left = nil
 		exp.Right = GenerateProblem(op - 1) // 使用递归生成右子表达式
-		exp.HasJuniorLevel = true
+		// exp.HasJuniorLevel = true
+		if exp.Level < UserTypeJuniorHigh {
+			exp.Level = UserTypeJuniorHigh
+		}
 	case operatorSin, operatorCos, operatorTan: // 一元运算符，高中难度
 		exp.Left = nil
 		exp.Right = GenerateProblem(op - 1) // 使用递归生成右子表达式
-		exp.HasSeniorLevel = true
+		// exp.HasSeniorLevel = true
+		if exp.Level < UserTypeSeniorHigh {
+			exp.Level = UserTypeSeniorHigh
+		}
 	}
 	switch exp.Operator { // 计算表达式的值
 	case operatorAdd:
@@ -98,13 +110,15 @@ func GenerateProblemStr(root *Expression) string {
 	// 视情况为子表达式加括号（不再为自己加括号！）
 	if root.Left != nil {
 		left = GenerateProblemStr(root.Left)
-		if root.Left.Operator != -1 && opPriority[root.Left.Operator] < opPriority[root.Operator] {
+		if (root.Left.Operator != operatorNone && opPriority[root.Left.Operator] < opPriority[root.Operator]) || // 左边的优先级低，加括号
+			(root.Left.Operator != operatorNone && opPriority[root.Operator] == 4) { // 三角函数特判，除非里面是个常数，否则都要加括号
 			left = "(" + left + ")"
 		}
 	}
 	if root.Right != nil {
 		right = GenerateProblemStr(root.Right)
-		if root.Right.Operator != -1 && opPriority[root.Right.Operator] < opPriority[root.Operator] {
+		if (root.Right.Operator != operatorNone && root.Operator != operatorSqrt && opPriority[root.Right.Operator] < opPriority[root.Operator]) || // 开方特判，因为 LaTeX 格式不能像平常一样加括号
+			(root.Right.Operator != operatorNone && opPriority[root.Operator] == 4) {
 			right = "(" + right + ")"
 		}
 	}
@@ -115,15 +129,15 @@ func GenerateProblemStr(root *Expression) string {
 	case operatorSub:
 		return "" + left + " - " + right + ""
 	case operatorMul:
-		return "" + left + " * " + right + ""
+		return "" + left + " \\times " + right + ""
 	case operatorDiv:
-		return "" + left + " / " + right + ""
+		return "" + left + " \\div " + right + ""
 	case operatorSqrt:
 		return "\\sqrt{" + right + "}" // LaTeX 格式
 	case operatorSquare:
 		return "" + right + " ^ 2"
 	case operatorSin:
-		return "sin(" + right + ""
+		return "sin" + right + ""
 	case operatorCos:
 		return "cos" + right + ""
 	case operatorTan:
