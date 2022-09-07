@@ -28,6 +28,7 @@ func auth() {
 
 // inputHandler 用于处理输入，并调用相应的函数
 func inputHandler() {
+	middleware.ReadAllProblems() // 读取所有题目，准备查重
 	regex, err := regexp.Compile(`切换为..`)
 	if err != nil {
 		log.Printf("正则表达式匹配错误：%v", err)

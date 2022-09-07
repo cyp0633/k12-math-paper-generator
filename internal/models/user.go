@@ -1,9 +1,5 @@
 package models
 
-import (
-	"errors"
-)
-
 // 用户模型，用于存储用户信息
 type User struct {
 	AccountType int    // 账号类型
@@ -36,13 +32,13 @@ var predefinedUsers = []User{
 }
 
 // 使用用户名查找用户，保留后期接入数据库的可扩展性。
-func GetUserByName(name string) (User, error) {
+func GetUserByName(name string) *User {
 	for _, usr := range predefinedUsers {
 		if usr.Username == name {
-			return usr, nil
+			return &usr
 		}
 	}
-	return User{}, errors.New("user not found")
+	return nil
 }
 
 func ChangeUserType(newType string) bool {
