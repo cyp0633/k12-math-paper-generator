@@ -44,7 +44,7 @@ func GenerateProblem(op int) *Expression {
 		exp.Operator = -1
 		// exp.HasJuniorLevel, exp.HasSeniorLevel = false, false
 		exp.Level = UserTypePrimarySchool
-		exp.Value = float64(GenNum(0, 101)) // 生成一个 0 到 100 的随机数
+		exp.Value = float64(GenNum(1, 101)) // 生成一个 1 到 100 的随机数
 		return &exp
 	}
 	// 确定该表达式的学习等级
@@ -122,7 +122,7 @@ func GenerateProblemStr(root *Expression) string {
 			right = "(" + right + ")"
 		}
 	}
-	// 连接左右表达式，并
+	// 连接左右表达式
 	switch root.Operator {
 	case operatorAdd:
 		return "" + left + " + " + right + ""

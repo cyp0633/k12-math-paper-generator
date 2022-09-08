@@ -17,12 +17,14 @@ func main() {
 func auth() {
 	var username, password string
 	fmt.Printf("请输入用户名和密码\n")
-	fmt.Scanf("%s %s\n", &username, &password)
-	if middleware.Auth(username, password) {
-		fmt.Printf("当前选择为%v出题\n", models.CurrentUser.GetUserTypeText()) // 根据当前用户类型选择教育等级名称
-	} else {
-		fmt.Printf("请输入正确的用户名、密码\n")
-		auth() // 使用递归重新验证。Go 的递归深度是无限的，所以没有问题
+	for {
+		fmt.Scanf("%s %s\n", &username, &password)
+		if middleware.Auth(username, password) {
+			fmt.Printf("当前选择为%v出题\n", models.CurrentUser.GetUserTypeText()) // 根据当前用户类型选择教育等级名称
+			break
+		} else {
+			fmt.Printf("请输入正确的用户名、密码\n")
+		}
 	}
 }
 
@@ -56,7 +58,7 @@ func inputHandler() {
 			continue
 		}
 		if num > 30 || num < 10 {
-			fmt.Printf("题目数量不合法")
+			fmt.Printf("题目数量不合法\n")
 			continue
 		}
 		middleware.GetProblems(num)
