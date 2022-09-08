@@ -39,7 +39,7 @@ func WriteProblemToDb(problem string, ans float64, usr string) {
 }
 
 func ClearProblems() {
-	result := DB.Delete(&Problem{})
+	result := DB.Where("1=1").Unscoped().Delete(&Problem{})
 	if result.Error != nil {
 		log.Printf("清空数据库失败: %v", result.Error)
 	}
