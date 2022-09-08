@@ -40,13 +40,14 @@ func inputHandler() {
 		fmt.Scanf("%s\n", &tmp)
 		matchChangeType := regex.MatchString(tmp) // 使用正则表达式判断是否切换用户类型
 		if matchChangeType {                      // 切换用户类型
-			ok := models.ChangeUserType(tmp[4:])
+			ok := models.ChangeUserType(tmp)
 			for !ok {
 				fmt.Printf("请输入小学、初中和高中三个选项中的一个\n")
 				fmt.Scanf("%s\n", &tmp)
 				ok = models.ChangeUserType(tmp)
 			}
 			fmt.Printf("准备生成%v数学题目，请输入生成题目数量\n", models.CurrentUser.GetUserTypeText())
+			fmt.Scanf("%s\n", &tmp)
 		}
 		fmt.Sscanf(tmp, "%d", &num)
 		if num == -1 {

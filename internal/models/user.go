@@ -43,11 +43,11 @@ func GetUserByName(name string) *User {
 
 func ChangeUserType(newType string) bool {
 	switch newType {
-	case "小学":
+	case "切换为小学":
 		CurrentUser.AccountType = UserTypePrimarySchool
-	case "初中":
+	case "切换为初中":
 		CurrentUser.AccountType = UserTypeJuniorHigh
-	case "高中":
+	case "切换为高中":
 		CurrentUser.AccountType = UserTypeSeniorHigh
 	default:
 		return false // 不合法的学习等级
