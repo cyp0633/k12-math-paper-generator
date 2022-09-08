@@ -4,7 +4,7 @@ import "k12-math-paper-generator/internal/models"
 
 func Auth(username, password string) bool {
 	user := models.GetUserByName(username)
-	if user.Password == password {
+	if user != nil && user.Password == password {
 		models.CurrentUser = user
 		return true
 	}
