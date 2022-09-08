@@ -88,9 +88,9 @@ func GenerateProblem(op int) *Expression {
 		exp.Value = exp.Left.Value - exp.Right.Value
 	case operatorMul:
 		exp.Value = exp.Left.Value * exp.Right.Value
-	case operatorDiv: // TODO：除 0 判断
+	case operatorDiv:
 		exp.Value = exp.Left.Value / exp.Right.Value
-	case operatorSqrt: // TODO：负数开方判断
+	case operatorSqrt:
 		exp.Value = math.Sqrt(exp.Right.Value)
 	case operatorSquare:
 		exp.Value = exp.Right.Value * exp.Right.Value
@@ -98,7 +98,7 @@ func GenerateProblem(op int) *Expression {
 		exp.Value = math.Sin(exp.Right.Value)
 	case operatorCos:
 		exp.Value = math.Cos(exp.Right.Value)
-	case operatorTan: // TODO：tan(n*pi/2) 判断？
+	case operatorTan:
 		exp.Value = math.Tan(exp.Right.Value)
 	}
 	return &exp

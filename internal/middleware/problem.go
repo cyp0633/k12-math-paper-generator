@@ -3,6 +3,7 @@ package middleware
 import (
 	"k12-math-paper-generator/internal/models"
 	"log"
+	"math"
 	"os"
 	"regexp"
 )
@@ -14,7 +15,7 @@ func GetProblems(num int) {
 	// var ans []float64
 	for i := 0; i < num; {
 		problem := models.GenerateProblem(models.GenNum(1, 6))
-		for problem.Level != models.CurrentUser.AccountType {
+		for problem.Level != models.CurrentUser.AccountType || math.IsNaN(problem.Value) || math.IsInf(problem.Value, 0) {
 			problem = models.GenerateProblem(models.GenNum(1, 6)) // 生成一个 1~5 个操作数的题目
 		}
 		problemStr := models.GenerateProblemStr(problem) // 生成题目字符串
