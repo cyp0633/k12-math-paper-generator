@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
-	"k12-math-paper-generator/frontend"
+	frontend "k12-math-paper-generator/frontend/dist"
+	"net/http"
+	"path"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,9 +18,9 @@ func main() {
 	for _, v := range dir {
 		fmt.Println(v.Name())
 	}
-	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
-	r.Run(":8080")
+	r.StaticFS(path.Join(""), http.FS(frontend.FS))
+	r.Run(":8000")
 	defer func() {
 		if err := recover(); err != nil {
 			fmt.Println(err)
