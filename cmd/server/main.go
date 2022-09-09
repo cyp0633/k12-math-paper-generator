@@ -11,13 +11,6 @@ import (
 
 func main() {
 	fmt.Printf("Hello, world.")
-	dir, err := frontend.FS.ReadDir("dist")
-	if err != nil {
-		fmt.Println(err)
-	}
-	for _, v := range dir {
-		fmt.Println(v.Name())
-	}
 	r := gin.Default()
 	r.StaticFS(path.Join(""), http.FS(frontend.FS))
 	r.Run(":8000")

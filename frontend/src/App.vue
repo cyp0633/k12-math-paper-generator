@@ -1,6 +1,8 @@
 <script setup>
+import { VueElement } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import 'katex/dist/katex.min.css';
 </script>
 
 <template>
@@ -9,7 +11,9 @@ import HelloWorld from './components/HelloWorld.vue'
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
-
+      <div v-katex:auto>
+        \(\frac{a_i}{1+x}\)
+      </div>
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
@@ -82,4 +86,6 @@ nav a:first-of-type {
     margin-top: 1rem;
   }
 }
+
+@import "../node_modules/katex/dist/katex.min.css";
 </style>
