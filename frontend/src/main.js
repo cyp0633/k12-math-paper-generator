@@ -6,11 +6,13 @@ import './assets/main.css'
 
 import Vue3Katex from '@hsorby/vue3-katex';
 
-const app = createApp(App).use(Vue3Katex, {
+const app = createApp(App)
+
+app.use(Vue3Katex, {
     globalOptions: {
         //... Define globally applied KaTeX options here
     }
-});
+})
 
 app.use(router)
 

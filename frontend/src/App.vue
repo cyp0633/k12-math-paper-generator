@@ -11,7 +11,7 @@ import 'katex/dist/katex.min.css';
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
-      <div v-katex:auto>
+      <div v-katex:auto class="h-8">
         \(\frac{a_i}{1+x}\)
       </div>
       <nav>
@@ -25,6 +25,7 @@ import 'katex/dist/katex.min.css';
 </template>
 
 <style scoped>
+@import "../node_modules/katex/dist/katex.min.css";
 header {
   line-height: 1.5;
   max-height: 100vh;
@@ -87,5 +88,4 @@ nav a:first-of-type {
   }
 }
 
-@import "../node_modules/katex/dist/katex.min.css";
 </style>
