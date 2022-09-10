@@ -1,6 +1,6 @@
 package models
 
-// rand.go 用于生成随机数
+// rand.go 用于生成随机数.
 
 import (
 	"crypto/rand"
@@ -8,7 +8,7 @@ import (
 	"math/big"
 )
 
-// genNum 在 [0, max) 内生成一个随机数
+// genNum 在 [0, max) 内生成一个随机数.
 func GenNum(min, max int) int {
 	val, err := rand.Int(rand.Reader, big.NewInt(int64(max-min)))
 	if err != nil {
@@ -17,7 +17,7 @@ func GenNum(min, max int) int {
 	return int(val.Int64()) + min
 }
 
-// genOp 生成一个符合等级的运算符
+// genOp 生成一个符合等级的运算符.
 func genOp() int {
 	var maxLevel int
 	switch CurrentUser.AccountType {

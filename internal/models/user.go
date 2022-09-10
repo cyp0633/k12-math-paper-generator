@@ -1,6 +1,6 @@
 package models
 
-// 用户模型，用于存储用户信息
+// 用户模型，用于存储用户信息。
 type User struct {
 	AccountType int    // 账号类型
 	Username    string // 用户名
@@ -8,14 +8,18 @@ type User struct {
 	Note        string // 备注
 }
 
+// 用户类型枚举。
 const (
 	UserTypePrimarySchool = iota // 小学
 	UserTypeJuniorHigh    = iota // 初中
 	UserTypeSeniorHigh    = iota // 高中
 )
 
+
+// 用户类型对应名称。
 var AccountTypeText = []string{"小学", "初中", "高中"}
 
+// 当前登录用户，仅限于个人项目 CLI。
 var CurrentUser *User
 
 // 存储附表 1 中的账户密码表。
@@ -41,6 +45,7 @@ func GetUserByName(name string) *User {
 	return nil
 }
 
+// ChangeUserType 修改用户类型。
 func ChangeUserType(newType string) bool {
 	switch newType {
 	case "切换为小学":
@@ -55,10 +60,12 @@ func ChangeUserType(newType string) bool {
 	return true // 修改成功
 }
 
+// ClearUser 清空当前登录用户，仍然仅在 CLI 下有效。
 func ClearUser() {
 	CurrentUser = nil
 }
 
+// User.GetUserTypeText 获取用户类型对应的文本。
 func (a User) GetUserTypeText() string {
 	return AccountTypeText[a.AccountType]
 }

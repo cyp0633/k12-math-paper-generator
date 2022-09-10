@@ -13,11 +13,11 @@ func main() {
 	inputHandler()
 }
 
-// auth 用于用户登录
+// auth 用于用户登录。
 func auth() {
 	var username, password string
 	fmt.Printf("请输入用户名和密码\n")
-	for {
+	for { // 循环尝试登录
 		fmt.Scanf("%s %s\n", &username, &password)
 		if middleware.Auth(username, password) {
 			fmt.Printf("当前选择为%v出题\n", models.CurrentUser.GetUserTypeText()) // 根据当前用户类型选择教育等级名称
@@ -28,7 +28,7 @@ func auth() {
 	}
 }
 
-// inputHandler 用于处理输入，并调用相应的函数
+// inputHandler 用于处理输入，并调用相应的函数。
 func inputHandler() {
 	middleware.ReadAllProblems() // 读取所有题目，准备查重
 	regex, err := regexp.Compile(`切换为..`)

@@ -9,7 +9,7 @@ import (
 
 var DB *gorm.DB
 
-// init 初始化数据库连接
+// init 使用 GORM，初始化数据库连接。
 func init() {
 	db, err := gorm.Open(sqlite.Open("data.db"), &gorm.Config{}) // 连接 SQLite 数据库
 	if err != nil {

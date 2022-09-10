@@ -15,7 +15,7 @@ func GetProblems(num int) {
 	// var ans []float64
 	for i := 0; i < num; {
 		problem := models.GenerateProblem(models.GenNum(1, 6))
-		for problem.Level != models.CurrentUser.AccountType || math.IsNaN(problem.Value) || math.IsInf(problem.Value, 0) {
+		for problem.Level != models.CurrentUser.AccountType || math.IsNaN(problem.Value) || math.IsInf(problem.Value, 0) { // 难度不符合，或答案 NaN（出现不合法），重新生成
 			problem = models.GenerateProblem(models.GenNum(1, 6)) // 生成一个 1~5 个操作数的题目
 		}
 		problemStr := models.GenerateProblemStr(problem) // 生成题目字符串
@@ -54,7 +54,7 @@ func ReadAllProblems() {
 			if file.IsDir() || !pattern.MatchString(file.Name()) { // 不是文件，或文件名不符合规范，跳过
 				continue
 			}
-			models.ReadProblemsIntoDb(dir.Name()+"/"+file.Name(), dir.Name())
+			models.ReadProblemsIntoDb(dir.Name()+"/"+file.Name(), dir.Name()) // 对某个特定的文件进行读取
 		}
 	}
 }

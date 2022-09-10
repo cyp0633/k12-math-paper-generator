@@ -5,15 +5,13 @@ import (
 	"math"
 )
 
-// Expression 描述一个数学表达式节点。
+// Expression 描述数学表达式树的某一个节点。
 type Expression struct {
 	Left     *Expression // 左子表达式
 	Right    *Expression // 右子表达式
 	Operator int         // 运算符
 	Value    float64     // 值
-	// HasJuniorLevel bool        // 是否有初中难度运算
-	// HasSeniorLevel bool        // 是否有高中难度运算
-	Level int // 难度等级，与账户类型对应
+	Level    int         // 难度等级，与账户类型对应
 }
 
 // 运算符。一元运算符统一只有右子表达式。
@@ -49,13 +47,9 @@ func GenerateProblem(op int) *Expression {
 	}
 	// 确定该表达式的学习等级
 	if exp.Left != nil {
-		// exp.HasJuniorLevel = exp.Left.HasJuniorLevel
-		// exp.HasSeniorLevel = exp.Left.HasSeniorLevel
 		exp.Level = exp.Left.Level
 	}
 	if exp.Right != nil {
-		// exp.HasJuniorLevel = exp.HasJuniorLevel || exp.Right.HasJuniorLevel
-		// exp.HasSeniorLevel = exp.HasSeniorLevel || exp.Right.HasSeniorLevel
 		if exp.Level < exp.Right.Level {
 			exp.Level = exp.Right.Level
 		}
@@ -69,19 +63,17 @@ func GenerateProblem(op int) *Expression {
 	case operatorSqrt, operatorSquare: // 一元运算符，初中难度
 		exp.Left = nil
 		exp.Right = GenerateProblem(op - 1) // 使用递归生成右子表达式
-		// exp.HasJuniorLevel = true
 		if exp.Level < UserTypeJuniorHigh {
 			exp.Level = UserTypeJuniorHigh
 		}
 	case operatorSin, operatorCos, operatorTan: // 一元运算符，高中难度
 		exp.Left = nil
 		exp.Right = GenerateProblem(op - 1) // 使用递归生成右子表达式
-		// exp.HasSeniorLevel = true
 		if exp.Level < UserTypeSeniorHigh {
 			exp.Level = UserTypeSeniorHigh
 		}
 	}
-	switch exp.Operator { // 计算表达式的值
+	switch exp.Operator { // 计算表达式的值，此处暂时忽略不合法运算，留到后面处理 NaN
 	case operatorAdd:
 		exp.Value = exp.Left.Value + exp.Right.Value
 	case operatorSub:
@@ -95,7 +87,7 @@ func GenerateProblem(op int) *Expression {
 	case operatorSquare:
 		exp.Value = exp.Right.Value * exp.Right.Value
 	case operatorSin:
-		exp.Value = math.Sin(exp.Right.Value)
+		exp.Value = math.Sin(exp.Right.Value) // 三角函数都是弧度制
 	case operatorCos:
 		exp.Value = math.Cos(exp.Right.Value)
 	case operatorTan:
@@ -110,40 +102,39 @@ func GenerateProblemStr(root *Expression) string {
 	// 视情况为子表达式加括号（不再为自己加括号！）
 	if root.Left != nil {
 		left = GenerateProblemStr(root.Left)
-		if (root.Left.Operator != operatorNone && opPriority[root.Left.Operator] < opPriority[root.Operator]) || // 左边的优先级低，加括号
-			(root.Left.Operator != operatorNone && opPriority[root.Operator] == 4) { // 三角函数特判，除非里面是个常数，否则都要加括号
+		if root.Left.Operator != operatorNone && opPriority[root.Left.Operator] < opPriority[root.Operator] {
 			left = "(" + left + ")"
 		}
 	}
 	if root.Right != nil {
 		right = GenerateProblemStr(root.Right)
 		if (root.Right.Operator != operatorNone && root.Operator != operatorSqrt && opPriority[root.Right.Operator] < opPriority[root.Operator]) || // 开方特判，因为 LaTeX 格式不能像平常一样加括号
-			(root.Right.Operator != operatorNone && opPriority[root.Operator] == 4) {
+			(root.Right.Operator != operatorNone && opPriority[root.Operator] == 4) { // 三角函数特判，除非里面是个常数，否则都要加括号。三角函数是单目运算符，所以只需要处理右侧
 			right = "(" + right + ")"
 		}
 	}
-	// 连接左右表达式
+	// 连接左右表达式字符串与运算符
 	switch root.Operator {
 	case operatorAdd:
-		return "" + left + " + " + right + ""
+		return left + " + " + right
 	case operatorSub:
-		return "" + left + " - " + right + ""
+		return left + " - " + right
 	case operatorMul:
-		return "" + left + " \\times " + right + ""
+		return left + " * " + right
 	case operatorDiv:
-		return "" + left + " \\div " + right + ""
+		return left + " / " + right
 	case operatorSqrt:
 		return "\\sqrt{" + right + "}" // LaTeX 格式
 	case operatorSquare:
-		return "" + right + " ^ 2"
+		return right + " ^ 2"
 	case operatorSin:
-		return "sin" + right + ""
+		return "sin" + right
 	case operatorCos:
-		return "cos" + right + ""
+		return "cos" + right
 	case operatorTan:
-		return "tan" + right + ""
+		return "tan" + right
 	case operatorNone:
-		return fmt.Sprintf("%v", root.Value)
+		return fmt.Sprintf("%v", root.Value) // 仅起到转换为字符串的作用
 	}
 	return ""
 }

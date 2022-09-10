@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// ReadProblemsIntoDb 将给定路径的单个文件中的题目读入数据库，同时记录用户信息
 func ReadProblemsIntoDb(path string, usr string) {
 	file, err := os.ReadFile(path)
 	problemPattern := regexp.MustCompile(`\d\d?\..+\n\n`) // 匹配题目
