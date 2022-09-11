@@ -1,10 +1,17 @@
 package models
 
+import (
+	"log"
+
+	"gorm.io/gorm"
+)
+
 // 用户模型，用于存储用户信息。
 type User struct {
+	gorm.Model
 	AccountType int    // 账号类型
-	Username    string // 用户名
-	Password    string // 密码
+	Username    string // 用户名，结对项目中是手机号
+	Password    string // 密码，此处经过 SHA256 加密
 	Note        string // 备注
 }
 
@@ -15,7 +22,6 @@ const (
 	UserTypeSeniorHigh    = iota // 高中
 )
 
-
 // 用户类型对应名称。
 var AccountTypeText = []string{"小学", "初中", "高中"}
 
@@ -24,25 +30,61 @@ var CurrentUser *User
 
 // 存储附表 1 中的账户密码表。
 var predefinedUsers = []User{
-	{UserTypePrimarySchool, "张三1", "123", ""},
-	{UserTypePrimarySchool, "张三2", "123", ""},
-	{UserTypePrimarySchool, "张三3", "123", ""},
-	{UserTypeJuniorHigh, "李四1", "123", ""},
-	{UserTypeJuniorHigh, "李四2", "123", ""},
-	{UserTypeJuniorHigh, "李四3", "123", ""},
-	{UserTypeSeniorHigh, "王五1", "123", ""},
-	{UserTypeSeniorHigh, "王五2", "123", ""},
-	{UserTypeSeniorHigh, "王五3", "123", ""},
+	{
+		AccountType: UserTypePrimarySchool,
+		Username:    "张三1",
+		Password:    "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+	},
+	{
+		AccountType: UserTypePrimarySchool,
+		Username:    "张三2",
+		Password:    "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+	},
+	{
+		AccountType: UserTypePrimarySchool,
+		Username:    "张三3",
+		Password:    "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+	},
+	{
+		AccountType: UserTypeJuniorHigh,
+		Username:    "李四1",
+		Password:    "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+	},
+	{
+		AccountType: UserTypeJuniorHigh,
+		Username:    "李四2",
+		Password:    "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+	},
+	{
+		AccountType: UserTypeJuniorHigh,
+		Username:    "李四3",
+		Password:    "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+	},
+	{
+		AccountType: UserTypeSeniorHigh,
+		Username:    "王五1",
+		Password:    "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+	},
+	{
+		AccountType: UserTypeSeniorHigh,
+		Username:    "王五2",
+		Password:    "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+	},
+	{
+		AccountType: UserTypeSeniorHigh,
+		Username:    "王五3",
+		Password:    "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+	},
 }
 
-// 使用用户名查找用户，保留后期接入数据库的可扩展性。
+// GetUserByName 使用用户名查找用户。
 func GetUserByName(name string) *User {
-	for _, usr := range predefinedUsers {
-		if usr.Username == name {
-			return &usr
-		}
+	var user *User
+	result := DB.Where(&User{Username: name}).First(&user)
+	if result.Error != nil && result.Error != gorm.ErrRecordNotFound {
+		log.Printf("GetUserByName error:%v", result.Error)
 	}
-	return nil
+	return user
 }
 
 // ChangeUserType 修改用户类型。
