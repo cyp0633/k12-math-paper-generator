@@ -113,6 +113,16 @@ func (a User) GetUserTypeText() string {
 	return AccountTypeText[a.AccountType]
 }
 
+func (a User) ChangePswd(pswd string) bool {
+	result := DB.Model(&a).Update("password", pswd)
+	if result.Error != nil {
+		log.Printf("ChangePswd error:%v", result.Error)
+		return false
+	}
+	return true
+}
+
+// CreateUser 使用手机号和验证码创建用户。
 func CreateUser(phone string, code int) bool {
 	var user = User{
 		Username: phone,

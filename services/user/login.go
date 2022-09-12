@@ -24,7 +24,7 @@ func (s *LoginService) Login(c *gin.Context) {
 		return
 	}
 	session := sessions.Default(c)
-	session.Set("user", user)
+	session.Set("user", user.Username)
 	session.Save()
 	c.JSON(http.StatusOK, gin.H{
 		"code": 0,

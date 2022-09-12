@@ -58,7 +58,17 @@ func logout(c *gin.Context) {
 
 // createPswd 创建密码，用于刚刚注册的阶段，同时校验手机验证码。
 func createPswd(c *gin.Context) {
-
+	var s user.CreatePswdService
+	err := c.BindJSON(&s)
+	if err != nil { // 未绑定上 JSON，请求格式错误
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code": -1,
+			"msg":  "请求格式错误",
+		})
+		c.Abort()
+		return
+	}
+	s.Create(c)
 }
 
 // changePswd 修改密码。
