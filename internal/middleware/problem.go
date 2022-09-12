@@ -33,7 +33,10 @@ func GetProblems(num int) {
 
 // ReadAllProblems 将子文件夹内的所有题目读取到数据库中
 func ReadAllProblems() {
-	models.ClearProblems() // 清空数据库；TODO 更好的查重方案
+	ok := models.ClearProblems(models.CurrentUser.Username) // 清空数据库；TODO 更好的查重方案
+	if !ok {
+		log.Println("清空数据库失败")
+	}
 	dirs, err := os.ReadDir("./")
 	if err != nil {
 		log.Printf("读取文件夹失败: %v", err)

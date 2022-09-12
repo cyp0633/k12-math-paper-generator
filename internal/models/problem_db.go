@@ -41,9 +41,11 @@ func WriteProblemToDb(problem string, ans float64, usr string) {
 }
 
 // ClearProblems 将题目数据库清空，防止两次打开之间文件变化
-func ClearProblems() {
-	result := DB.Where("1=1").Unscoped().Delete(&Problem{})
+func ClearProblems(username string) bool {
+	result := DB.Where(&User{Username: username}).Unscoped().Delete(&Problem{})
 	if result.Error != nil {
 		log.Printf("清空数据库失败: %v", result.Error)
+		return false
 	}
+	return true
 }
