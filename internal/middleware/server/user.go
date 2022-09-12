@@ -1,32 +1,40 @@
 package server
 
 import (
-	"k12-math-paper-generator/internal/models"
+	"k12-math-paper-generator/services/user"
 	"net/http"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
-func createUser(c *gin.Context) {}
+func createUser(c *gin.Context) {
+	var s user.CreateUserService
+	err := c.BindJSON(&s)
+	if err != nil { // 未绑定上 JSON，请求格式错误
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code": -1,
+			"msg":  "请求格式错误",
+		})
+		c.Abort()
+		return
+	}
+	s.Create(c)
+}
 
 // login 使用用户名和密码登录，并将用户信息存入 Session。
 func login(c *gin.Context) {
-	user := models.GetUserByName(c.PostForm("username"))
-	if user.Password != c.PostForm("password") {
-		c.JSON(http.StatusUnauthorized, gin.H{
+	var s user.LoginService
+	err := c.BindJSON(&s)
+	if err != nil { // 未绑定上 JSON，请求格式错误
+		c.JSON(http.StatusBadRequest, gin.H{
 			"code": -1,
-			"msg":  "用户名或密码错误",
+			"msg":  "请求格式错误",
 		})
 		c.Abort()
+		return
 	}
-	session := sessions.Default(c)
-	session.Set("user", user)
-	session.Save()
-	c.JSON(http.StatusOK, gin.H{
-		"code": 0,
-		"msg":  "登录成功",
-	})
+	s.Login(c)
 }
 
 // logout 清除 Session 中的用户信息。
@@ -47,3 +55,11 @@ func logout(c *gin.Context) {
 		"msg":  "登出成功",
 	})
 }
+
+// createPswd 创建密码，用于刚刚注册的阶段，同时校验手机验证码。
+func createPswd(c *gin.Context) {
+
+}
+
+// changePswd 修改密码。
+func changePswd(c *gin.Context) {}

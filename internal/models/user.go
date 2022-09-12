@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"log"
 
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ type User struct {
 	AccountType int    // 账号类型
 	Username    string // 用户名，结对项目中是手机号
 	Password    string // 密码，此处经过 SHA256 加密
-	Note        string // 备注
+	Note        string // 备注，服务端中用于手机验证码
 }
 
 // 用户类型枚举。
@@ -110,4 +111,18 @@ func ClearUser() {
 // User.GetUserTypeText 获取用户类型对应的文本。
 func (a User) GetUserTypeText() string {
 	return AccountTypeText[a.AccountType]
+}
+
+func CreateUser(phone string, code int) bool {
+	var user = User{
+		Username: phone,
+		Note:     fmt.Sprint(code),
+	}
+	result := DB.Create(&user)
+	if result.Error != nil {
+		log.Printf("CreateUser error:%v", result.Error)
+		return false
+	}
+	log.Printf("CreateUser success:%v", user)
+	return true
 }

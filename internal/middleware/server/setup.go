@@ -30,9 +30,10 @@ func Setup() {
 
 	// 用户相关路由
 	api.POST("/user", createUser)       // 创建用户
+	api.POST("/user/pswd", createPswd)  // 创建密码
 	api.POST("/user/session", login)    // 登录
 	api.DELETE("/user/session", logout) // 登出
-	api.POST("/")
+	api.PATCH("/user", changePswd)      // 修改密码
 
 	defer func() {
 		if err := recover(); err != nil {
