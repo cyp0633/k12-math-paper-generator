@@ -40,14 +40,6 @@ func login(c *gin.Context) {
 // logout 清除 Session 中的用户信息。
 func logout(c *gin.Context) {
 	session := sessions.Default(c)
-	user := session.Get("user")
-	if user == nil {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"code": -1,
-			"msg":  "未登录",
-		})
-		c.Abort()
-	}
 	session.Delete("user")
 	session.Save()
 	c.JSON(http.StatusOK, gin.H{
@@ -72,4 +64,35 @@ func createPswd(c *gin.Context) {
 }
 
 // changePswd 修改密码。
-func changePswd(c *gin.Context) {}
+func changePswd(c *gin.Context) {
+	var s user.ChangePasswordService
+	err := c.BindJSON(&s)
+	if err != nil { // 未绑定上 JSON，请求格式错误
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code": -1,
+			"msg":  "请求格式错误",
+		})
+		c.Abort()
+		return
+	}
+	s.ChangePassword(c)
+}
+
+// auth 验证用户是否登录。
+func auth(c *gin.Context) {
+	session := sessions.Default(c)
+	user := session.Get("user")
+	if user == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"code": -1,
+			"msg":  "未登录",
+		})
+		c.Abort()
+		return
+	}
+	c.Set("user", user)
+	c.JSON(http.StatusOK, gin.H{
+		"code": 0,
+		"msg":  "已登录",
+	})
+}

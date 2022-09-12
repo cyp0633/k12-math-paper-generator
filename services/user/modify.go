@@ -4,7 +4,6 @@ import (
 	"k12-math-paper-generator/internal/models"
 	"net/http"
 
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,8 +13,8 @@ type ChangePasswordService struct {
 }
 
 func (s *ChangePasswordService) ChangePassword(c *gin.Context) {
-	session := sessions.Default(c)
-	user := models.GetUserByName(session.Get("user").(string))
+	username, _ := c.Get("user")
+	user := models.GetUserByName(username.(string))
 	if user.Password != s.OldPassword {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"code": -1,
