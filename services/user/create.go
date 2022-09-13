@@ -3,6 +3,7 @@ package user
 import (
 	"k12-math-paper-generator/internal/models"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -10,12 +11,12 @@ import (
 
 // CreateUserService 用于注册时传入 JSON 的绑定。
 type CreateUserService struct {
-	Phone string `json:"username" binding:"required"`
+	Username string `json:"username" binding:"required"`
 }
 
 // Create 使用电话号码创建用户。
 func (s *CreateUserService) Create(c *gin.Context) {
-	u := models.GetUserByName(s.Phone)
+	u := models.GetUserByName(s.Username)
 	if u != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code": -1,
@@ -24,7 +25,12 @@ func (s *CreateUserService) Create(c *gin.Context) {
 		return
 	}
 	code := models.GenNum(1000, 9999)
-	ok := models.SendSms(s.Phone, code)
+	var ok bool
+	if _, err := strconv.Atoi(s.Username); err == nil { // 无错误时均为数字，代表为手机号
+		ok = models.SendSms(s.Username, code)
+	} else { // 否则视为邮箱
+		ok = models.SendMail(s.Username, code)
+	}
 	if !ok {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code": -1,
@@ -32,7 +38,7 @@ func (s *CreateUserService) Create(c *gin.Context) {
 		})
 		return
 	}
-	ok = models.CreateUser(s.Phone, code)
+	ok = models.CreateUser(s.Username, code)
 	if !ok {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code": -1,
