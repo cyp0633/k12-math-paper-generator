@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	frontend "k12-math-paper-generator/frontend/dist"
+	"k12-math-paper-generator/internal/models"
 	"net/http"
 	"path"
 
@@ -17,7 +18,7 @@ func Setup() {
 	store := cookie.NewStore([]byte("secret")) // 使用 cookie 存储 session
 
 	r.StaticFS(path.Join(""), http.FS(frontend.FS)) // 服务静态文件
-	r.Run(":8000")
+	r.Run(":" + models.ServerConf.Port)             // 启动服务器
 
 	api := r.Group("/api")                         // 设置 API 路由组
 	api.Use(sessions.Sessions("mysession", store)) // 设置 Gin 中间件

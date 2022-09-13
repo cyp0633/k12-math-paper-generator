@@ -12,7 +12,7 @@ import (
 // SendSms 用于向客户端发送验证码短信，返回是否成功。
 func SendSms(phone string, code int) bool {
 	config := sdk.NewConfig()
-	credentials := credentials.NewAccessKeyCredential("accessKeyId", "accessKeySecret") // to be filled later
+	credentials := credentials.NewAccessKeyCredential(SMSConf.AccessKeyID, SMSConf.AccessKeySecret)
 	client, err := dysmsapi.NewClientWithOptions("cn-hangzhou", config, credentials)
 	if err != nil {
 		log.Printf("创建短信客户端失败：%v", err)
