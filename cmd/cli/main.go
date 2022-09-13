@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"k12-math-paper-generator/internal/middleware"
 	"k12-math-paper-generator/internal/models"
@@ -19,7 +21,10 @@ func auth() {
 	fmt.Printf("请输入用户名和密码\n")
 	for { // 循环尝试登录
 		fmt.Scanf("%s %s\n", &username, &password)
-		if middleware.Auth(username, password) {
+		h := sha256.New() // 使用 SHA256 加密密码，因数据库中存储的就是加密后的密码
+		h.Write([]byte(password))
+		sha := hex.EncodeToString(h.Sum(nil))
+		if middleware.Auth(username, sha) {
 			fmt.Printf("当前选择为%v出题\n", models.CurrentUser.GetUserTypeText()) // 根据当前用户类型选择教育等级名称
 			break
 		} else {
