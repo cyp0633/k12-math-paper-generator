@@ -49,3 +49,17 @@ func ClearProblems(username string) bool {
 	}
 	return true
 }
+
+// Answers 从数据库中读取某人所有题目的答案，按 ID 升序
+func Answers(username string) []float64 {
+	var problems []Problem
+	result := DB.Where(&Problem{User: username}).Order("id asc").Find(&problems)
+	if result.Error != nil && result.Error != gorm.ErrRecordNotFound {
+		log.Printf("查询数据库失败: %v", result.Error)
+	}
+	var ans []float64
+	for _, p := range problems {
+		ans = append(ans, p.Answer)
+	}
+	return ans
+}

@@ -38,6 +38,7 @@ func Setup() {
 
 	// 试卷相关路由
 	api.GET("/paper", auth, getPaper) // 获取试卷
+	api.POST("/paper", auth, judge)   // 判卷
 
 	defer func() {
 		if err := recover(); err != nil {

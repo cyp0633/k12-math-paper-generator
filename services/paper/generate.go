@@ -8,19 +8,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetPaperService 描述了前端请求生成试卷的 JSON 格式。
 type GetPaperService struct {
 	Level int `json:"level" binding:"required"` // 难度等级
 	Num   int `json:"num" binding:"required"`   // 题目数量
 }
 
+// problemPost 是特定某道题题面的格式。
 type problemPost struct {
-	ProblemStr string     `json:"problem_str"`
-	Options    [4]float64 `json:"options"`
+	ProblemStr string     `json:"problem_str"` // 题干
+	Options    [4]float64 `json:"options"`     // 选项
 }
 
+// GetPaper 生成试卷并返回给前端。
 func (s *GetPaperService) GetPaper(c *gin.Context) {
-	// var l []string // 题目列表
-	// var option [][4]float64
 	var pSet []problemPost
 	if s.Level < 0 || s.Level > 2 || s.Num < 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -51,8 +52,8 @@ func (s *GetPaperService) GetPaper(c *gin.Context) {
 		models.WriteProblemToDb(user.(string), problem.Value, str) // TODO: 如何实现快速查询答案？
 		for j := 0; j < 4; j++ {
 			o[j] = float64(models.GenNum(1, 100000) / 1000.0) // 随机生成选项数字
-			o[models.GenNum(0, 3)] = problem.Value            // 随机将答案放入选项中
 		}
+		o[models.GenNum(0, 3)] = problem.Value // 随机将答案放入选项中
 		var p = problemPost{
 			ProblemStr: l,
 			Options:    o,
