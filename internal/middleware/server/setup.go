@@ -18,7 +18,6 @@ func Setup() {
 	store := cookie.NewStore([]byte("secret")) // 使用 cookie 存储 session
 
 	r.StaticFS(path.Join(""), http.FS(frontend.FS)) // 服务静态文件
-	r.Run(":" + models.ServerConf.Port)             // 启动服务器
 
 	api := r.Group("/api")                         // 设置 API 路由组
 	api.Use(sessions.Sessions("mysession", store)) // 设置 Gin 中间件
@@ -32,13 +31,15 @@ func Setup() {
 	// 用户相关路由
 	api.POST("/user", createUser)             // 创建用户
 	api.POST("/user/pswd", createPswd)        // 创建密码
-	api.POST("/user/session", login)          // 登录
+	api.GET("/user/session", login)           // 登录
 	api.DELETE("/user/session", auth, logout) // 登出
 	api.PATCH("/user", auth, changePswd)      // 修改密码
 
 	// 试卷相关路由
 	api.GET("/paper", auth, getPaper) // 获取试卷
 	api.POST("/paper", auth, judge)   // 判卷
+
+	r.Run(":" + models.ServerConf.Port) // 启动服务器
 
 	defer func() {
 		if err := recover(); err != nil {
