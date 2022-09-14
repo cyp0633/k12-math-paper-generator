@@ -1,3 +1,4 @@
+// server 包定义路由及其处理函数。
 package server
 
 import (
@@ -5,7 +6,7 @@ import (
 	frontend "k12-math-paper-generator/frontend/dist"
 	"k12-math-paper-generator/internal/models"
 	"net/http"
-	"path"
+	"strings"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -17,7 +18,8 @@ func Setup() {
 
 	store := cookie.NewStore([]byte("secret")) // 使用 cookie 存储 session
 
-	r.StaticFS(path.Join(""), http.FS(frontend.FS)) // 服务静态文件
+	// r.StaticFS(path.Join(""), http.FS(frontend.FS)) // 服务静态文件
+	r.Use(frontendHandler) // 先经过 handler 判断是否为前端请求
 
 	api := r.Group("/api")                         // 设置 API 路由组
 	api.Use(sessions.Sessions("mysession", store)) // 设置 Gin 中间件
@@ -46,4 +48,14 @@ func Setup() {
 			fmt.Println(err)
 		}
 	}()
+}
+
+func frontendHandler(c *gin.Context) {
+	if strings.HasPrefix(c.Request.URL.Path, "/api") { // API 请求，不处理
+		c.Next()
+		return
+	}
+	// 返回 frontend.FS 中的文件
+	c.FileFromFS(c.Request.URL.Path, http.FS(frontend.FS))
+	c.Abort()
 }
