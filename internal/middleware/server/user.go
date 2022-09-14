@@ -1,7 +1,7 @@
 package server
 
 import (
-	"k12-math-paper-generator/services/user"
+	"k12-math-paper-generator/internal/services/user"
 	"net/http"
 
 	"github.com/gin-contrib/sessions"

@@ -1,7 +1,7 @@
 package server
 
 import (
-	"k12-math-paper-generator/services/paper"
+	"k12-math-paper-generator/internal/services/paper"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
