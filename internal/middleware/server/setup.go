@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -20,6 +21,7 @@ func Setup() {
 
 	// r.StaticFS(path.Join(""), http.FS(frontend.FS)) // 服务静态文件
 	r.Use(frontendHandler) // 先经过 handler 判断是否为前端请求
+	r.Use(cors.Default())  // 允许跨域
 
 	api := r.Group("/api")                         // 设置 API 路由组
 	api.Use(sessions.Sessions("mysession", store)) // 设置 Gin 中间件
