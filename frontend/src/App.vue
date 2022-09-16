@@ -19,7 +19,7 @@ import 'katex/dist/katex.min.css';
                     <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
                         <li class="mr-3">
                             <!-- <a class="inline-block py-2 px-4 text-white no-underline" @click="router.push('/home')">主页</a> -->
-                            <RouterLink class="inline-block py-2 px-4 text-white no-underline" to="/home">主页
+                            <RouterLink class="inline-block py-2 px-4 text-white no-underline" to="/">主页
                             </RouterLink>
                         </li>
                         <li class="mr-3">
@@ -40,20 +40,10 @@ import 'katex/dist/katex.min.css';
                 </div>
             </div>
         </nav>
-        <div class="container shadow-lg mx-auto mt-24 md:mt-16 h-screen">
-            <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-            <div class="wrapper">
-                <HelloWorld msg="You did it!" />
-                <div v-katex:auto class="h-8">
-                    \(\frac{a_i}{1+x}\)
-                </div>
-                <nav>
-                    <RouterLink to="/">Home</RouterLink>
-                    <RouterLink to="/about">About</RouterLink>
-                </nav>
-            </div>
+        <div class="container  mx-auto mt-24 md:mt-16 h-screen ">
+          <!-- <n-notification-provider> -->
             <RouterView />
+          <!-- </n-notification-provider> -->
         </div>
 
     </div>
