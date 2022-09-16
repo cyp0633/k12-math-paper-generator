@@ -22,6 +22,7 @@ function postLogin() {
             const statuscode = xmlHttp.status;
             if (statuscode == 200) {
                 alert("登录成功");
+                $router.push("/getproblem");
             } else {
                 alert("登录失败");
             }
@@ -55,7 +56,7 @@ function getLoginStatus() {
                 <n-input v-model:value="data.rawPassword" type="password" placeholder="密码" />
             </div>
             <n-button @click="postLogin">登录</n-button>
-            <n-button @click="getLoginStatus">查询登录状态</n-button>
+            <n-button @click="">查询登录状态</n-button>
         </div>
     </main>
 </template> 

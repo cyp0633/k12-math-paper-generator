@@ -4,6 +4,25 @@ import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import 'katex/dist/katex.min.css';
 
+const data = {
+    text: "已登录，点击做题",
+}
+
+onMounted(() => {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/api/user/session", true);
+    xhr.send();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                data.text = "已登录，点击做题";
+            } else {
+                data.text = "未登录，点击登录";
+            }
+        }
+    }
+})
+
 </script>
 
 <template>
@@ -33,17 +52,24 @@ import 'katex/dist/katex.min.css';
                                 to="/register">注册</RouterLink>
                         </li>
                         <li class="mr-3">
-                            <RouterLink class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4"
+                            <RouterLink
+                                class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4"
                                 to="/login">登录</RouterLink>
+                        </li>
+                        <li class="mr-3">
+                            <p
+                                class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4 text-center">
+                                <span v-html="data.text" />
+                            </p>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-        <div class="container  mx-auto mt-24 md:mt-16 h-screen ">
-          <!-- <n-notification-provider> -->
+        <div class="container mx-auto mt-28 md:mt-16 h-screen ">
+            <!-- <n-notification-provider> -->
             <RouterView />
-          <!-- </n-notification-provider> -->
+            <!-- </n-notification-provider> -->
         </div>
 
     </div>
@@ -51,65 +77,4 @@ import 'katex/dist/katex.min.css';
 
 <style scoped>
 @import "../node_modules/katex/dist/katex.min.css";
-/* header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-} */
 </style>
