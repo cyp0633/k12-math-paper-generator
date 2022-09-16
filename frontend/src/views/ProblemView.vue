@@ -1,9 +1,9 @@
 <script setup>
-import Register from '../components/Register.vue'
+import Problem from '../components/Problem.vue'
 </script>
 
 <template>
     <main>
-        <Register />
+        <Problem />
     </main>
 </template>

@@ -1,14 +1,13 @@
 <script setup>
-import { VueElement } from 'vue';
+import { onUpdated } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 import 'katex/dist/katex.min.css';
 
 const data = {
-    text: "已登录，点击做题",
+    text: " ",
 }
 
-onMounted(() => {
+onUpdated(() => {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/api/user/session", true);
     xhr.send();

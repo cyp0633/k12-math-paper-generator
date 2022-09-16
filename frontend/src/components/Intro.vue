@@ -12,6 +12,7 @@ import { NH1, NButton } from 'naive-ui'
             <div class="content-center place-content-center grid-cols-2 gap-5 flex">
                 <n-button @click="$router.push('/register')">注册</n-button>
                 <n-button @click="$router.push('/login')">登录</n-button>
+                <n-button @click="$router.push('/problem/1')">测试专用</n-button>
             </div>
         </div>
     </main>
