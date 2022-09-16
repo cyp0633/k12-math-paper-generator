@@ -7,6 +7,7 @@ import (
 	"k12-math-paper-generator/internal/models"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
@@ -20,8 +21,20 @@ func Setup() {
 	store := cookie.NewStore([]byte("secret")) // 使用 cookie 存储 session
 
 	// r.StaticFS(path.Join(""), http.FS(frontend.FS)) // 服务静态文件
+	r.Use(cors.New(cors.Config{
+		AllowMethods:           []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
+		AllowHeaders:           []string{"Origin", "Content-Length", "Content-Type", "Cookie", "X-Cr-Policy", "Authorization", "X-Cr-Path", "X-Cr-FileName"},
+		AllowCredentials:       true,
+		MaxAge:                 12 * time.Hour,
+		AllowWildcard:          true,
+		AllowBrowserExtensions: true,
+		AllowWebSockets:        true,
+		AllowOrigins:           []string{"http://localhost:8000", "http://localhost:5173", "http://127.0.0.1:5173"}, // Vite 和 Gin 临时值，用于跨域设置
+		// AllowAllOrigins: true,
+		ExposeHeaders: []string{"Content-Length", "Content-Type", "X-Cr-Policy", "X-Cr-Path", "X-Cr-FileName", "Set-Cookie"},
+	})) // 允许跨域
+
 	r.Use(frontendHandler) // 先经过 handler 判断是否为前端请求
-	r.Use(cors.Default())  // 允许跨域
 
 	api := r.Group("/api")                         // 设置 API 路由组
 	api.Use(sessions.Sessions("mysession", store)) // 设置 Gin 中间件
@@ -32,10 +45,19 @@ func Setup() {
 		})
 	})
 
+	api.GET("/user/session", auth, func(c *gin.Context) {
+		session := sessions.Default(c)
+		user := session.Get("user")
+		c.JSON(http.StatusOK, gin.H{
+			"message": "pong",
+			"user":    user,
+		})
+	})
+
 	// 用户相关路由
 	api.POST("/user", createUser)             // 创建用户
 	api.POST("/user/pswd", createPswd)        // 创建密码
-	api.GET("/user/session", login)           // 登录
+	api.POST("/user/session", login)          // 登录
 	api.DELETE("/user/session", auth, logout) // 登出
 	api.PATCH("/user", auth, changePswd)      // 修改密码
 
