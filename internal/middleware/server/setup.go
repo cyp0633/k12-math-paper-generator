@@ -56,7 +56,7 @@ func Setup() {
 
 	// 用户相关路由
 	api.POST("/user", createUser)             // 创建用户
-	api.POST("/user/pswd", createPswd)        // 创建密码
+	api.PUT("/user", createPswd)        // 创建密码
 	api.POST("/user/session", login)          // 登录
 	api.DELETE("/user/session", auth, logout) // 登出
 	api.PATCH("/user", auth, changePswd)      // 修改密码

@@ -18,7 +18,7 @@ type CreateUserService struct {
 func (s *CreateUserService) Create(c *gin.Context) {
 	u := models.GetUserByName(s.Username)
 	if u != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusConflict, gin.H{
 			"code": -1,
 			"msg":  "用户已存在",
 		})
