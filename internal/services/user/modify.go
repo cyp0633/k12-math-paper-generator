@@ -29,6 +29,7 @@ func (s *ChangePasswordService) ChangePassword(c *gin.Context) {
 			"code": -1,
 			"msg":  "修改密码失败",
 		})
+		c.Abort()
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{

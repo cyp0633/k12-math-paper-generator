@@ -20,7 +20,9 @@ onMounted(() => { // 提交答案，获取成绩
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
+                var res;
                 res = JSON.parse(xhr.responseText);
+                console.log(res);
                 data.seen = 0;
                 data.score = res.score;
                 Global.answers = [];

@@ -36,6 +36,8 @@ func (s *GetPaperService) GetPaper(c *gin.Context) {
 			"code": -1,
 			"msg":  "数据库错误",
 		})
+		c.Abort()
+		return
 	}
 	for i := 0; i < s.Num; {
 		var l string
@@ -49,7 +51,7 @@ func (s *GetPaperService) GetPaper(c *gin.Context) {
 			continue
 		}
 		l = str
-		models.WriteProblemToDb(user, problem.Value, str) // TODO: 如何实现快速查询答案？
+		models.WriteProblemToDb(str, problem.Value, user)
 		for j := 0; j < 4; j++ {
 			o[j] = float64(models.GenNum(1, 100000) / 1000.0) // 随机生成选项数字
 		}

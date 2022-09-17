@@ -57,7 +57,8 @@ function getProblems() {
                 if (res.code == 0) {
                     alert("生成试卷成功");
                     var i = ref(0);
-                    for (i = 0; i < global.problems.length; i++) { // 初始化答案
+                    global.answers=[]; // 清理答案数组
+                    for (i = 0; i < global.problems.length; i++) { // 初始化答案均为 NaN
                         global.answers[i] = NaN;
                     }
                     console.log(global.problems); // 测试用控制台输出

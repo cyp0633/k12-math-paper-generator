@@ -36,6 +36,7 @@ func (s *CreateUserService) Create(c *gin.Context) {
 			"code": -1,
 			"msg":  "发送验证码失败",
 		})
+		c.Abort()
 		return
 	}
 	ok = models.CreateUser(s.Username, code)
@@ -44,6 +45,7 @@ func (s *CreateUserService) Create(c *gin.Context) {
 			"code": -1,
 			"msg":  "创建用户失败",
 		})
+		c.Abort()
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
