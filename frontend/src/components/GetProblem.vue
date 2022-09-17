@@ -1,12 +1,11 @@
 <script setup>
-import { NRadioGroup, NRadioButton, NSpace, NInput,NButton } from 'naive-ui';
-import { RouterLink, RouterView} from 'vue-router';
+import { NRadioGroup, NRadioButton, NSpace, NInput, NButton } from 'naive-ui';
+import { RouterLink, RouterView } from 'vue-router';
 import { onMounted, VueElement } from 'vue';
-// export { problems }
+import global from '../var'
 
 const data = {
     timestr: "上午"
-
 };
 
 const difficulty = [
@@ -23,8 +22,6 @@ const difficulty = [
         label: "高中",
     },
 ];
-
-var problems = [];
 
 var username = "用户名";
 
@@ -45,14 +42,14 @@ function getProblems() {
         alert("请填写完整信息");
         return;
     }
-    var params="level="+data.difficulty+"&count="+data.problemNum;
+    var params = "level=" + data.difficulty + "&count=" + data.problemNum;
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/api/paper?"+params, true);
+    xhr.open("GET", "/api/paper?" + params, true);
     xhr.send();
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
-                problems = JSON.parse(xhr.responseText);
+                global.problems = JSON.parse(xhr.responseText);
                 console.log(res);
                 if (res.code == 0) {
                     alert("生成试卷成功");

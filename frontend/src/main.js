@@ -4,6 +4,7 @@ import router from './router'
 // import './assets/main.css'
 
 import Vue3Katex from '@hsorby/vue3-katex';
+import 'katex/dist/katex.min.css';
 
 const app = createApp(App)
 
