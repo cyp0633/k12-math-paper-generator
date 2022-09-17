@@ -16,8 +16,9 @@ type Problem struct {
 }
 
 // CheckDupProblem 检查是否有重复的题目
-func CheckDupProblem(problem string) bool {
-	result := DB.Where(&Problem{Expression: problem, User: CurrentUser.Username}).Find(&Problem{}) // 用 Find 而非 First 以避免不必要的日志输出；只搜索本用户的
+func CheckDupProblem(problem, user string) bool {
+	var p []Problem
+	result := DB.Where(&Problem{Expression: problem, User: user}).Find(&p) // 用 Find 而非 First 以避免不必要的日志输出；只搜索本用户的
 	if result.Error != nil && result.Error != gorm.ErrRecordNotFound {
 		log.Printf("查询数据库失败: %v", result.Error)
 	}

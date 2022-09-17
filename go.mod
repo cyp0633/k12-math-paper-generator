@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/aliyun/alibaba-cloud-sdk-go v1.61.1768
+	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-contrib/sessions v0.0.5
 	github.com/gin-gonic/gin v1.8.1
 	github.com/glebarez/sqlite v1.4.6
@@ -12,7 +13,6 @@ require (
 )
 
 require (
-	github.com/gin-contrib/cors v1.4.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/glebarez/go-sqlite v1.18.1 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect

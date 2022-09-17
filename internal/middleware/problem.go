@@ -8,18 +8,18 @@ import (
 	"regexp"
 )
 
-// GetProblems 用于生成题目
+// GetProblems 用于在 CLI 模式下生成题目
 // num: 题目数量
 func GetProblems(num int) {
 	var str []string
 	// var ans []float64
 	for i := 0; i < num; {
-		problem := models.GenerateProblem(models.GenNum(1, 6))
+		problem := models.GenerateProblem(models.GenNum(1, 6), models.CurrentUser.AccountType)
 		for problem.Level != models.CurrentUser.AccountType || math.IsNaN(problem.Value) || math.IsInf(problem.Value, 0) { // 难度不符合，或答案 NaN（出现不合法），重新生成
-			problem = models.GenerateProblem(models.GenNum(1, 6)) // 生成一个 1~5 个操作数的题目
+			problem = models.GenerateProblem(models.GenNum(1, 6), models.CurrentUser.AccountType) // 生成一个 1~5 个操作数的题目
 		}
-		problemStr := models.GenerateProblemStr(problem) // 生成题目字符串
-		if models.CheckDupProblem(problemStr) {          // 检查是否重复
+		problemStr := models.GenerateProblemStr(problem)                     // 生成题目字符串
+		if models.CheckDupProblem(problemStr, models.CurrentUser.Username) { // 检查是否重复
 			continue
 		}
 		str = append(str, problemStr)

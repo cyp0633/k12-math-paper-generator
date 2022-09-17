@@ -18,9 +18,9 @@ func GenNum(min, max int) int {
 }
 
 // genOp 生成一个符合等级的运算符.
-func genOp() int {
+func genOp(level int) int {
 	var maxLevel int
-	switch CurrentUser.AccountType {
+	switch level {
 	case UserTypePrimarySchool:
 		maxLevel = 4 // 加减乘除
 	case UserTypeJuniorHigh:
