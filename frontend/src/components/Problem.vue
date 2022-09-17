@@ -1,13 +1,36 @@
 <script setup>
-import { onMounted } from 'vue';
+import { watch, ref, onUpdated, reactive } from 'vue';
 import { useRoute } from 'vue-router';
-import { NButton } from 'naive-ui';
+import { NButton, NRadioGroup, NRadioButton, NPagination } from 'naive-ui';
 import global from '../var';
+import router from '../router';
 
 const route = useRoute();
 
-var id = route.params.id;
+var id = reactive(route.params.id);
 
+const data = reactive({
+    id: ref(id),
+})
+
+onUpdated(() => {
+    id = route.params.id;
+    console.log(id);
+});
+
+function test() {
+    console.log(global.problems)
+    console.log(global.answers)
+    var i
+}
+
+watch(() => data.page,
+    async (newPage) => {
+        router.push('/problem/' + newPage)
+        data.id = newPage
+        console.log("newPage=" + newPage)
+        console.log("id=" + data.id)
+    })
 
 </script>
 
@@ -15,12 +38,21 @@ var id = route.params.id;
     <main>
         <div class="container mx-auto text-center w-4/6 space-y-6 pt-20">
             <h1 class="text-4xl">
-                第 {{id}} 题
+                第 {{data.id}} 题
             </h1>
             <div>
-                <katex-element :expression="global.problems[id-1]" class="text-4xl" />
+                <katex-element :expression="global.problems[data.id-1].problem_str" class="text-4xl" />
+            </div>
+            <div class="space-y-2">
+                请选择结果<br>
+                <n-radio-group v-model:value="global.answers[data.id-1]" name="result" size="large">
+                    <n-radio-button v-for="problem in global.problems[data.id-1].options" :key="problem"
+                        :value="problem">
+                        {{problem}}</n-radio-button>
+                </n-radio-group>
             </div>
             <n-button @click="test">测试</n-button>
+            <n-pagination v-model:page="data.page" :page-count="global.problems.length" class="flex" />
         </div>
     </main>
 </template>

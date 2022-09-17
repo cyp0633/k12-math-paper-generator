@@ -25,7 +25,7 @@ const difficulty = [
 
 var username = "用户名";
 
-onMounted(() => {
+onMounted(() => { // 自动切换页面上的时间文字
     var date = new Date();
     var hour = date.getHours();
     if (hour >= 0 && hour < 12) {
@@ -53,6 +53,9 @@ function getProblems() {
                 console.log(res);
                 if (res.code == 0) {
                     alert("生成试卷成功");
+                    for(i=0;i<length(global.problems);i++){ // 初始化答案
+                        global.answers[i] = 0.0;
+                    }
                 } else {
                     alert("生成试卷失败");
                 }
