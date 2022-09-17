@@ -11,6 +11,7 @@ var id = reactive(route.params.id);
 
 const data = reactive({
     id: ref(id),
+    insist: ref(0),
 })
 
 onUpdated(() => {
@@ -26,11 +27,24 @@ function test() {
 
 watch(() => data.page,
     async (newPage) => {
-        router.push('/problem/' + newPage)
+        router.replace('/problem/' + newPage)
         data.id = newPage
         console.log("newPage=" + newPage)
         console.log("id=" + data.id)
     })
+
+function handin() {
+    var i = 0;
+    for (i = 0; i < global.problems.length; i++) {
+        if (global.answers[i] == NaN && data.insist == 0) {
+            alert("未完成所有题目，如坚持交卷，请再次点击交卷");
+            data.insist = 1;
+            return;
+        }
+    }
+    router.replace('/result')
+
+}
 
 </script>
 
@@ -53,6 +67,7 @@ watch(() => data.page,
             </div>
             <n-button @click="test">测试</n-button>
             <n-pagination v-model:page="data.page" :page-count="global.problems.length" class="flex" />
+            <n-button @click="handin" size="large">交卷</n-button>
         </div>
     </main>
 </template>

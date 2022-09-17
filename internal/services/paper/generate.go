@@ -29,8 +29,8 @@ func (s *GetPaperService) GetPaper(c *gin.Context) {
 			"msg":  "请求参数错误",
 		})
 	}
-	user, _ := c.Get("user")
-	ok := models.ClearProblems(user.(string))
+	user := c.GetString("user")
+	ok := models.ClearProblems(user)
 	if !ok {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code": -1,
@@ -40,16 +40,16 @@ func (s *GetPaperService) GetPaper(c *gin.Context) {
 	for i := 0; i < s.Num; {
 		var l string
 		var o [4]float64
-		problem := models.GenerateProblem(models.GenNum(1, 6))
+		problem := models.GenerateProblem(models.GenNum(1, 6), s.Level)
 		for problem.Level != s.Level || math.IsNaN(problem.Value) || math.IsInf(problem.Value, 0) {
-			problem = models.GenerateProblem(models.GenNum(1, 6))
+			problem = models.GenerateProblem(models.GenNum(1, 6), s.Level)
 		}
 		str := models.GenerateProblemStr(problem)
-		if models.CheckDupProblem(str) {
+		if models.CheckDupProblem(str, user) {
 			continue
 		}
 		l = str
-		models.WriteProblemToDb(user.(string), problem.Value, str) // TODO: 如何实现快速查询答案？
+		models.WriteProblemToDb(user, problem.Value, str) // TODO: 如何实现快速查询答案？
 		for j := 0; j < 4; j++ {
 			o[j] = float64(models.GenNum(1, 100000) / 1000.0) // 随机生成选项数字
 		}
@@ -59,6 +59,7 @@ func (s *GetPaperService) GetPaper(c *gin.Context) {
 			Options:    o,
 		}
 		pSet = append(pSet, p)
+		i++
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"code": 0,

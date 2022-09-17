@@ -1,10 +1,13 @@
 <script setup>
 import { NInput, NButton, useMessage } from 'naive-ui';
+import { useRouter } from 'vue-router';
 import sha256 from 'js-sha256';
 
 var data = {
     loginForm: {},
 }
+
+const router = useRouter();
 
 // 登录
 function postLogin() {
@@ -22,7 +25,7 @@ function postLogin() {
             const statuscode = xmlHttp.status;
             if (statuscode == 200) {
                 alert("登录成功");
-                $router.push("/getproblem");
+                router.push("/getproblem");
             } else {
                 alert("登录失败");
             }

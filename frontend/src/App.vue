@@ -36,28 +36,23 @@ onUpdated(() => {
                 <div class="flex w-full pt-2 content-center justify-between md:w-1/2 md:justify-end">
                     <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
                         <li class="mr-3">
-                            <!-- <a class="inline-block py-2 px-4 text-white no-underline" @click="router.push('/home')">主页</a> -->
                             <RouterLink class="inline-block py-2 px-4 text-white no-underline" to="/">主页
                             </RouterLink>
                         </li>
                         <li class="mr-3">
-                            <RouterLink
-                                class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4"
-                                to="/about">关于</RouterLink>
+                            <RouterLink class="inline-block py-2 px-4 text-white no-underline" to="/getproblem">学习
+                            </RouterLink>
                         </li>
                         <li class="mr-3">
-                            <RouterLink
-                                class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4"
-                                to="/register">注册</RouterLink>
+                            <RouterLink class="inline-block py-2 px-4 text-white no-underline" to="/register">注册
+                            </RouterLink>
                         </li>
                         <li class="mr-3">
-                            <RouterLink
-                                class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4"
-                                to="/login">登录</RouterLink>
+                            <RouterLink class="inline-block py-2 px-4 text-white no-underline" to="/login">登录
+                            </RouterLink>
                         </li>
                         <li class="mr-3">
-                            <p
-                                class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4 text-center">
+                            <p class="inline-block py-2 px-4 text-white no-underline">
                                 <span v-html="data.text" />
                             </p>
                         </li>

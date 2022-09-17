@@ -42,20 +42,22 @@ function getProblems() {
         alert("请填写完整信息");
         return;
     }
-    var params = "level=" + data.difficulty + "&count=" + data.problemNum;
+    var params = "level=" + data.difficulty + "&num=" + data.problemNum;
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/api/paper?" + params, true);
     xhr.send();
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
+                var res = JSON.parse(xhr.responseText);
                 global.problems = JSON.parse(xhr.responseText);
                 console.log(res);
                 if (res.code == 0) {
                     alert("生成试卷成功");
                     for(i=0;i<length(global.problems);i++){ // 初始化答案
-                        global.answers[i] = 0.0;
+                        global.answers[i] = NaN;
                     }
+                    console.log(global.problems); // 测试用控制台输出
                 } else {
                     alert("生成试卷失败");
                 }
