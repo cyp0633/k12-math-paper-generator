@@ -16,7 +16,7 @@ onMounted(() => { // 提交答案，获取成绩
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/api/paper", true);
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(JSON.stringify({ "level": Global.answers }));
+    xhr.send(JSON.stringify({ "answers": Global.answers }));
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {

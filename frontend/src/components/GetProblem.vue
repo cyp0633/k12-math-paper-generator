@@ -1,12 +1,14 @@
 <script setup>
 import { NRadioGroup, NRadioButton, NSpace, NInput, NButton } from 'naive-ui';
-import { RouterLink, RouterView } from 'vue-router';
-import { onMounted, VueElement } from 'vue';
+import { RouterLink, RouterView, useRouter } from 'vue-router';
+import { onMounted, ref } from 'vue';
 import global from '../var'
 
 const data = {
     timestr: "上午"
 };
+
+const router = useRouter();
 
 const difficulty = [
     {
@@ -50,14 +52,16 @@ function getProblems() {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 var res = JSON.parse(xhr.responseText);
-                global.problems = JSON.parse(xhr.responseText);
+                global.problems = res.data;
                 console.log(res);
                 if (res.code == 0) {
                     alert("生成试卷成功");
-                    for(i=0;i<length(global.problems);i++){ // 初始化答案
+                    var i = ref(0);
+                    for (i = 0; i < global.problems.length; i++) { // 初始化答案
                         global.answers[i] = NaN;
                     }
                     console.log(global.problems); // 测试用控制台输出
+                    router.push('/problem/1');
                 } else {
                     alert("生成试卷失败");
                 }
