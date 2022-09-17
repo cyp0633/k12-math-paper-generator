@@ -9,7 +9,7 @@ import (
 
 func getPaper(c *gin.Context) {
 	var s paper.GetPaperService
-	err := c.BindJSON(&s)
+	err := c.Bind(&s)
 	if err != nil { // 未绑定上 JSON，请求格式错误
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code": -1,

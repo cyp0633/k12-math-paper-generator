@@ -10,8 +10,8 @@ import (
 
 // GetPaperService 描述了前端请求生成试卷的 JSON 格式。
 type GetPaperService struct {
-	Level int `json:"level" binding:"required"` // 难度等级
-	Num   int `json:"num" binding:"required"`   // 题目数量
+	Level int `json:"level" form:"level" binding:"required"` // 难度等级
+	Num   int `json:"num" form:"num" binding:"required"`     // 题目数量
 }
 
 // problemPost 是特定某道题题面的格式。

@@ -91,8 +91,4 @@ func auth(c *gin.Context) {
 		return
 	}
 	c.Set("user", user)
-	c.JSON(http.StatusOK, gin.H{
-		"code": 0,
-		"msg":  "已登录",
-	})
 }
