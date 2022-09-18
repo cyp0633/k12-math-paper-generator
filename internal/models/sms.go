@@ -21,9 +21,9 @@ func SendSms(phone string, code int) bool {
 	request := dysmsapi.CreateSendSmsRequest()
 	request.Scheme = "https"
 	request.PhoneNumbers = phone
-	request.TemplateParam = "{\"code\":\"" + fmt.Sprint(phone) + "\"}"
-	request.SignName = "数学学习软件"
-	request.TemplateCode = "SMS_251096882"
+	request.TemplateParam = "{\"code\":\"" + fmt.Sprint(code) + "\"}"
+	request.SignName = "阿里云短信测试"
+	request.TemplateCode = "SMS_154950909"
 	response, err := client.SendSms(request)
 	if err != nil {
 		log.Printf("发送短信失败：%v", err)
