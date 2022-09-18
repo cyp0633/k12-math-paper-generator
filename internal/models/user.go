@@ -80,10 +80,12 @@ var predefinedUsers = []User{
 
 // GetUserByName 使用用户名查找用户。
 func GetUserByName(name string) *User {
-	var user *User
-	result := DB.Where(&User{Username: name}).First(&user)
+	user := new(User)
+	result := DB.Where(&User{Username: name}).First(user)
 	if result.Error != nil && result.Error != gorm.ErrRecordNotFound {
 		log.Printf("GetUserByName error:%v", result.Error)
+	} else if result.Error == gorm.ErrRecordNotFound {
+		return nil
 	}
 	return user
 }

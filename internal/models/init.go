@@ -17,9 +17,11 @@ func init() {
 		fmt.Printf("数据库连接失败：%v", err)
 	}
 	db.AutoMigrate(&Problem{}, &User{}) // 迁移数据库 Schema
+	DB = db
 	// 添加预设账户
 	for _, u := range predefinedUsers {
-		db.Create(&u)
+		if getuser := GetUserByName(u.Username); getuser == nil {
+			db.Create(&u)
+		}
 	}
-	DB = db
 }
