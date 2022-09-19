@@ -19,7 +19,6 @@ function postLogin() {
     var hash = sha256.create();
     hash.update(data.rawPassword);
     data.loginForm.password = hash.hex(); // 计算密码的 SHA256 哈希值
-    console.log(JSON.stringify(data.loginForm));
     xmlHttp.send(JSON.stringify(data.loginForm));
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState == XMLHttpRequest.DONE) { // 等待后期换一个更漂亮的提示框

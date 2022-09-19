@@ -24,7 +24,6 @@ function changePassword() {
         alert("两次输入的密码不一致");
         return;
     }
-    console.log(data.newPassword);
     var format = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{6,10}$/.test(data.newPassword)
     if (!format) {
         alert("新密码格式错误");
@@ -42,7 +41,6 @@ function changePassword() {
     }))
     xhr.onreadystatechange = function () {
         if (xhr.readyState == XMLHttpRequest.DONE) {
-            console.log(xhr.response)
             switch (xhr.status) {
                 case 200:
                     alert("修改成功");
@@ -61,7 +59,6 @@ function changePassword() {
 }
 
 function logout() {
-    console.log(Global.title.loginUser)
     if (Global.title.loginUser == null) {
         alert("请先登录");
         return;

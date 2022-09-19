@@ -16,21 +16,12 @@ const data = reactive({
 
 onUpdated(() => {
     id = route.params.id;
-    console.log(id);
 });
-
-function test() {
-    console.log(global.problems)
-    console.log(global.answers)
-    var i
-}
 
 watch(() => data.page,
     async (newPage) => {
         router.replace('/problem/' + newPage)
         data.id = newPage
-        console.log("newPage=" + newPage)
-        console.log("id=" + data.id)
     })
 
 function handin() {
@@ -65,7 +56,6 @@ function handin() {
                         {{problem}}</n-radio-button>
                 </n-radio-group>
             </div>
-            <n-button @click="test">测试</n-button>
             <n-pagination v-model:page="data.page" :page-count="global.problems.length" class="flex" />
             <n-button @click="handin" size="large">交卷</n-button>
         </div>

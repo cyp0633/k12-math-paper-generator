@@ -17,7 +17,6 @@ onMounted(() => {
     xhr.send();
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
-            console.log(xhr.responseText);
             if (xhr.status == 200) {
                 var resp = JSON.parse(xhr.responseText);
                 Global.title.loginUser = resp.user;

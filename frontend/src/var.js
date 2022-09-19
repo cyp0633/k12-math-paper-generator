@@ -17,12 +17,10 @@ function textChange() {
         title.showRegister = true;
     }
     else {
-        console.log(title.loginUser);
         title.text = title.loginUser + " 的个人空间";
         title.to = "/profile";
         title.showRegister = false;
     }
-    console.log(title);
 }
 
-export default { problems, answers, loginUser, textChange, title }
+export default { problems, answers, textChange, title }

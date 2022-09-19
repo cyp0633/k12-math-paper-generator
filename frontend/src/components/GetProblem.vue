@@ -53,7 +53,6 @@ function getProblems() {
             if (xhr.status == 200) {
                 var res = JSON.parse(xhr.responseText);
                 global.problems = res.data;
-                console.log(res);
                 if (res.code == 0) {
                     alert("生成试卷成功");
                     var i = ref(0);
@@ -61,7 +60,6 @@ function getProblems() {
                     for (i = 0; i < global.problems.length; i++) { // 初始化答案均为 NaN
                         global.answers[i] = NaN;
                     }
-                    console.log(global.problems); // 测试用控制台输出
                     router.push('/problem/1');
                 } else {
                     alert("生成试卷失败");
