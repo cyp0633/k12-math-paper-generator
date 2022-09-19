@@ -55,8 +55,8 @@ function tryRegister() {
         alert("两次密码不一致");
         return;
     }
-    var re = new RegExp("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{6,10}$/");
-    if (!re.test(data.password)) {
+    var format = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{6,10}$/.test(data.password);
+    if (!format) {
         alert("密码格式错误");
         return;
     }
@@ -66,6 +66,21 @@ function tryRegister() {
     var hash = sha256.create(); // 加密密码
     hash.update(data.password);
     xhr.send(JSON.stringify({ "username": data.username, "verify": data.verification, "password": hash.hex() }))
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            switch (xhr.status) {
+                case 200:
+                    alert("注册成功，请登录");
+                    window.location.href = "/login";
+                    break;
+                case 400:
+                    alert("验证码错误");
+                    break;
+                default:
+                    alert("未知错误");
+            }
+        }
+    }
 }
 </script>
     
@@ -84,8 +99,10 @@ function tryRegister() {
                     </div>
                 </div>
                 <div class="space-y-2">
-                    <n-input v-model:value="data.password" type="password" placeholder="密码" />
-                    <n-input v-model:value="data.password2" type="password" placeholder="确认密码" />
+                    <n-input v-model:value="data.password" type="password" show-password-on="mousedown"
+                        placeholder="密码" />
+                    <n-input v-model:value="data.password2" type="password" show-password-on="mousedown"
+                        placeholder="确认密码" />
                 </div>
                 <n-button @click="tryRegister" size="large">注册</n-button>
             </div>

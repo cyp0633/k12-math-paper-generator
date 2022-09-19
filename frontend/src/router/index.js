@@ -54,6 +54,16 @@ const router = createRouter({
       path: '/result',
       name: 'result',
       component: () => import('../views/ResultView.vue')
+    },
+    {
+      path:'/opensource',
+      name:'opensource',
+      component: () => import('../views/OpenSourceView.vue')
+    },
+    {
+      path:'/profile',
+      name:'profile',
+      component: () => import('../views/ProfileView.vue')
     }
   ]
 })

@@ -4,7 +4,6 @@ import { RouterLink, RouterView } from 'vue-router'
 import { NDivider } from 'naive-ui';
 import Global from './var.js';
 import 'katex/dist/katex.min.css';
-import { text } from 'stream/consumers';
 
 const data = reactive({
     text: ref("未登录，点击登录"),
