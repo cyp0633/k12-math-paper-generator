@@ -2,6 +2,7 @@
 import { NInput, NButton, useMessage } from 'naive-ui';
 import { useRouter } from 'vue-router';
 import sha256 from 'js-sha256';
+import Global from '../var'
 
 var data = {
     loginForm: {},
@@ -25,6 +26,8 @@ function postLogin() {
             const statuscode = xmlHttp.status;
             if (statuscode == 200) {
                 alert("登录成功");
+                res=JSON.parse(xmlHttp.responseText);
+                Global.user=res.user;
                 router.push("/getproblem");
             } else {
                 alert("登录失败");

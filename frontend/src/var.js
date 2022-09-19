@@ -1,23 +1,8 @@
-var problems = [
-    {
-        problem_str: "1+1",
-        options: [
-            "1",
-            "2",
-            "3",
-            "4"
-        ]
-    },
-    {
-        problem_str: "2+2",
-        options: [
-            "1",
-            "2",
-            "3",
-            "4"
-        ]
-    }
-]
+import { ref } from "vue"
+
+var problems = []
 var answers = []
 
-export default { problems, answers }
+var loginUser = ref("")
+
+export default { problems, answers, loginUser }

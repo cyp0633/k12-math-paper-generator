@@ -1,31 +1,56 @@
 <script setup>
-import { onUpdated } from 'vue';
+import { onUpdated, onMounted, reactive, ref } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
+import { NDivider } from 'naive-ui';
+import Global from './var.js';
 import 'katex/dist/katex.min.css';
+import { text } from 'stream/consumers';
 
-const data = {
-    text: " ",
-}
+const data = reactive({
+    text: ref("未登录，点击登录"),
+    to: ref("/login"),
+    showRegister: ref(true),
+})
 
-onUpdated(() => {
+onMounted(() => {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/api/user/session", true);
     xhr.send();
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
-                data.text = "已登录，点击做题";
+                var resp = JSON.parse(xhr.responseText);
+                Global.user = resp.user;
             } else {
+                Global.user = ref(null);
                 data.text = "未登录，点击登录";
             }
         }
+        textChange();
     }
 })
+
+onUpdated(() => {
+    textChange();
+})
+
+function textChange() {
+    if (Global.user == null) {
+        data.text = "未登录，点击登录";
+        data.to = "/login";
+        data.showRegister = true;
+    }
+    else {
+        data.text = Global.user + " 的个人空间";
+        data.to = "/profile";
+        data.showRegister = false;
+    }
+}
 
 </script>
 
 <template>
-    <div>
+    <header>
         <nav class="bg-gray-800 p-2 mt-0 fixed w-full z-10 top-0">
             <div class="container mx-auto flex flex-wrap items-center">
                 <div class="flex w-full md:w-1/2 justify-center md:justify-start text-white font-extrabold">
@@ -43,30 +68,31 @@ onUpdated(() => {
                             <RouterLink class="inline-block py-2 px-4 text-white no-underline" to="/getproblem">学习
                             </RouterLink>
                         </li>
-                        <li class="mr-3">
+                        <li class="mr-3" v-show="data.showRegister">
                             <RouterLink class="inline-block py-2 px-4 text-white no-underline" to="/register">注册
                             </RouterLink>
                         </li>
                         <li class="mr-3">
-                            <RouterLink class="inline-block py-2 px-4 text-white no-underline" to="/login">登录
-                            </RouterLink>
-                        </li>
-                        <li class="mr-3">
                             <p class="inline-block py-2 px-4 text-white no-underline">
-                                <span v-html="data.text" />
+                                <RouterLink :to="data.to">{{data.text}}</RouterLink>
                             </p>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
+    </header>
+    <main>
         <div class="container mx-auto mt-28 md:mt-16 h-screen ">
             <!-- <n-notification-provider> -->
             <RouterView />
             <!-- </n-notification-provider> -->
         </div>
-
-    </div>
+    </main>
+    <footer>
+        <n-divider />
+        <RouterLink to="/opensource" class="float-right m-3">开放源代码声明</RouterLink>
+    </footer>
 </template>
 
 <style scoped>
