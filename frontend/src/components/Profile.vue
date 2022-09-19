@@ -3,6 +3,7 @@ import { NInput, NButton } from 'naive-ui';
 import { reactive, ref } from 'vue';
 import { sha256 } from 'js-sha256';
 import Global from '../var';
+import router from '../router';
 
 const data = reactive({
     oldPassword: ref(null),
@@ -11,7 +12,7 @@ const data = reactive({
 });
 
 function changePassword() {
-    if (Global.loginUser == null) {
+    if (Global.title.loginUser == null) {
         alert("请先登录");
         return;
     }
@@ -60,14 +61,23 @@ function changePassword() {
 }
 
 function logout() {
+    console.log(Global.title.loginUser)
+    if (Global.title.loginUser == null) {
+        alert("请先登录");
+        return;
+    }
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/api/user", true);
+    xhr.open("DELETE", "/api/user/session", true);
     xhr.send();
     xhr.onreadystatechange = function () {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             switch (xhr.status) {
                 case 200:
                     alert("注销成功");
+                    Global.title.loginUser = null;
+                    Global.textChange();
+                    router.replace('/');
+                    vm.$forceUpdate();
                     break;
                 case 401:
                     alert("未登录");
@@ -101,7 +111,8 @@ function logout() {
         <div class="container space-y-5">
             <h2 class="text-3xl">退出账户</h2>
             <div class="container space-y-2 w-1/4 mx-auto">
-                <n-button class="w-1/2 flex mx-auto text" type="error" text-color="#d03050">确认退出</n-button>
+                <n-button class="w-1/2 flex mx-auto text" type="error" text-color="#d03050" @click="logout">确认退出
+                </n-button>
             </div>
         </div>
     </div>

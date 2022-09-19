@@ -81,7 +81,7 @@ function gotoProblems() {
 <template>
     <main>
         <div class="container mx-auto text-center w-4/6 space-y-6 pt-20">
-            <h1 class="font-sans font-bold text-5xl">{{data.timestr}}好，{{username}}!</h1>
+            <h1 class="font-sans font-bold text-5xl">{{data.timestr}}好，{{global.title.loginUser}}!</h1>
             <h1 class="font-sans font-medium text-3xl">请选择您的题目等级与数量</h1>
             <div class="space-y-2">
                 <p>难度选择</p>
