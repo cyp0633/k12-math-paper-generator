@@ -12,7 +12,7 @@ func TestSendSms(t *testing.T) {
 		args args
 		want bool
 	}{
-		{"", args{"18570750036", 123456}, true},
+		{"", args{"1**********", 123456}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
