@@ -3,8 +3,6 @@ import { reactive, ref } from "vue"
 var problems = [];
 var answers = [];
 
-var loginUser = reactive(null);
-
 var title = reactive({
     text: "未登录，点击登录",
     to: "/login",
