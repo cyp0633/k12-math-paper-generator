@@ -12,8 +12,8 @@ func TestSendMail(t *testing.T) {
 		args args
 		want bool
 	}{
-		{"QQ", args{"2541200123@qq.com", 123456}, true},
-		{"163", args{"s2541200123@163.com", 123456}, true},
+		{"QQ", args{"*******@qq.com", 123456}, true},
+		{"163", args{"*******@163.com", 123456}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
