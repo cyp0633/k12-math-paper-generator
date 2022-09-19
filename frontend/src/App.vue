@@ -1,15 +1,15 @@
 <script setup>
-import { onUpdated, onMounted, reactive, ref } from 'vue';
+import { watch, onUpdated, onMounted, reactive, ref } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
 import { NDivider } from 'naive-ui';
 import Global from './var.js';
 import 'katex/dist/katex.min.css';
 
-const data = reactive({
-    text: ref("未登录，点击登录"),
-    to: ref("/login"),
-    showRegister: ref(true),
-})
+// const data = reactive({
+//     text: ref("未登录，点击登录"),
+//     to: ref("/login"),
+//     showRegister: ref(true),
+// })
 
 onMounted(() => {
     var xhr = new XMLHttpRequest();
@@ -17,35 +17,26 @@ onMounted(() => {
     xhr.send();
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
+            console.log(xhr.responseText);
             if (xhr.status == 200) {
                 var resp = JSON.parse(xhr.responseText);
-                Global.user = resp.user;
+                Global.title.loginUser = resp.user;
             } else {
-                Global.user = ref(null);
-                data.text = "未登录，点击登录";
+                Global.title.loginUser = null;
             }
+            Global.textChange();
         }
-        textChange();
+
     }
 })
 
 onUpdated(() => {
-    textChange();
+    Global.textChange();
 })
 
-function textChange() {
-    if (Global.user == null) {
-        data.text = "未登录，点击登录";
-        data.to = "/login";
-        data.showRegister = true;
-    }
-    else {
-        data.text = Global.user + " 的个人空间";
-        data.to = "/profile";
-        data.showRegister = false;
-    }
-}
-
+watch(() => Global.title.loginUser, async () => {
+    Global.textChange();
+}, { deep: true })
 </script>
 
 <template>
@@ -67,13 +58,13 @@ function textChange() {
                             <RouterLink class="inline-block py-2 px-4 text-white no-underline" to="/getproblem">学习
                             </RouterLink>
                         </li>
-                        <li class="mr-3" v-show="data.showRegister">
+                        <li class="mr-3" v-show="Global.title.showRegister">
                             <RouterLink class="inline-block py-2 px-4 text-white no-underline" to="/register">注册
                             </RouterLink>
                         </li>
                         <li class="mr-3">
                             <p class="inline-block py-2 px-4 text-white no-underline">
-                                <RouterLink :to="data.to">{{data.text}}</RouterLink>
+                                <RouterLink :to="Global.title.to">{{Global.title.text}}</RouterLink>
                             </p>
                         </li>
                     </ul>

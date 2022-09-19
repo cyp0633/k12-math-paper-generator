@@ -13,12 +13,12 @@ const router = useRouter();
 // 登录
 function postLogin() {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("POST", "/api/user/session",true); 
+    xmlHttp.open("POST", "/api/user/session", true);
     xmlHttp.setRequestHeader("Content-Type", "application/json");
-    xmlHttp.withCredentials=true; // 允许携带cookie
-    var hash=sha256.create();
+    xmlHttp.withCredentials = true; // 允许携带cookie
+    var hash = sha256.create();
     hash.update(data.rawPassword);
-    data.loginForm.password=hash.hex(); // 计算密码的 SHA256 哈希值
+    data.loginForm.password = hash.hex(); // 计算密码的 SHA256 哈希值
     console.log(JSON.stringify(data.loginForm));
     xmlHttp.send(JSON.stringify(data.loginForm));
     xmlHttp.onreadystatechange = function () {
@@ -26,27 +26,12 @@ function postLogin() {
             const statuscode = xmlHttp.status;
             if (statuscode == 200) {
                 alert("登录成功");
-                res=JSON.parse(xmlHttp.responseText);
-                Global.user=res.user;
-                router.push("/getproblem");
+                var res = JSON.parse(xmlHttp.responseText);
+                Global.title.loginUser = res.user;
+                Global.textChange();
+                window.location.href = '/';
             } else {
                 alert("登录失败");
-            }
-        }
-    }
-}
-
-// 获取登陆状态
-function getLoginStatus() {
-    var xhr=new XMLHttpRequest();
-    xhr.open("GET","/api/user/session",true);
-    xhr.send();
-    xhr.onreadystatechange=function(){
-        if(xhr.readyState==4){
-            if(xhr.status==200){
-                alert("已登录")
-            }else{
-                alert("未登录")
             }
         }
     }
@@ -62,7 +47,6 @@ function getLoginStatus() {
                 <n-input v-model:value="data.rawPassword" type="password" placeholder="密码" />
             </div>
             <n-button @click="postLogin">登录</n-button>
-            <n-button @click="">查询登录状态</n-button>
         </div>
     </main>
 </template> 
