@@ -72,18 +72,49 @@ watch(() => Global.title.loginUser, async () => {
         </nav>
     </header>
     <main>
-        <div class="container mx-auto mt-28 md:mt-16">
-            <n-message-provider>
-                <RouterView />
-            </n-message-provider>
+        <div id="mainframe" class="min-h-screen py-16 ">
+            <div class="container mx-auto mt-28 md:mt-16 pt-16 pb-8 acrylic">
+                <n-message-provider>
+                    <RouterView />
+                </n-message-provider>
+                <n-divider />
+                <RouterLink to="/opensource" class="float-right m-3">开放源代码声明</RouterLink>
+            </div>
         </div>
     </main>
-    <footer>
-        <n-divider />
-        <RouterLink to="/opensource" class="float-right m-3">开放源代码声明</RouterLink>
-    </footer>
 </template>
 
 <style scoped>
 @import "../node_modules/katex/dist/katex.min.css";
+
+#mainframe {
+    background-image: url(./assets/catalina.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.acrylic {
+    border-radius: 8px;
+    border-width: thin;
+    border-style: solid;
+    border-color: #e5e5e5;
+    -webkit-backdrop-filter: blur(40px);
+    backdrop-filter: blur(40px);
+    background-color: #F7F7F7CC;
+    overflow-y: auto;
+    background-image: url('./assets/noise.png');
+    background-repeat: repeat;
+    box-shadow: 0px 25.6px 57.6px rgb(0 0 0 / 14%), 0px 0px 16.4px rgb(0 0 0 / 12%);
+}
+
+/* set the background image of the whole website to ./assets/catalina.jpg */
+/* * {
+    background-image: url(./assets/catalina.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+} */
 </style>
