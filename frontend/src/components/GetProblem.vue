@@ -12,15 +12,15 @@ const router = useRouter();
 
 const difficulty = [
     {
-        value: 0,
+        value: 1,
         label: "小学",
     },
     {
-        value: 1,
+        value: 2,
         label: "初中",
     },
     {
-        value: 2,
+        value: 3,
         label: "高中",
     },
 ];
@@ -56,7 +56,7 @@ function getProblems() {
                 if (res.code == 0) {
                     alert("生成试卷成功");
                     var i = ref(0);
-                    global.answers=[]; // 清理答案数组
+                    global.answers = []; // 清理答案数组
                     for (i = 0; i < global.problems.length; i++) { // 初始化答案均为 NaN
                         global.answers[i] = NaN;
                     }

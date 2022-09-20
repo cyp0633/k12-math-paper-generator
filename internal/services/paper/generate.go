@@ -23,6 +23,7 @@ type problemPost struct {
 // GetPaper 生成试卷并返回给前端。
 func (s *GetPaperService) GetPaper(c *gin.Context) {
 	var pSet []problemPost
+	s.Level-- // 前端传入的参数 1 代表小学，以此类推；0 会触发绑定错误，暂不清楚原因
 	if s.Level < 0 || s.Level > 2 || s.Num < 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code": -1,
