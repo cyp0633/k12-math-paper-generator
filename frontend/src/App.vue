@@ -72,7 +72,7 @@ watch(() => Global.title.loginUser, async () => {
         </nav>
     </header>
     <main>
-        <div class="container mx-auto mt-28 md:mt-16 h-screen ">
+        <div class="container mx-auto mt-28 md:mt-16">
             <n-message-provider>
                 <RouterView />
             </n-message-provider>
