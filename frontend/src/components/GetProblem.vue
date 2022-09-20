@@ -44,6 +44,14 @@ function getProblems() {
         alert("请填写完整信息");
         return;
     }
+    if (typeof (data.problemNum) != "number") {
+        alert("题目数量必须为数字");
+        return;
+    }
+    if (data.problemNum < 10 || data.problemNum > 30) {
+        alert("题目数量必须在 10 与 30 之间");
+        return;
+    }
     var params = "level=" + data.difficulty + "&num=" + data.problemNum;
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/api/paper?" + params, true);
