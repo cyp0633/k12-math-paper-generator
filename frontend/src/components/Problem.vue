@@ -1,7 +1,7 @@
 <script setup>
 import { watch, ref, onUpdated, reactive } from 'vue';
 import { useRoute } from 'vue-router';
-import { NButton, NRadioGroup, NRadioButton, NPagination } from 'naive-ui';
+import { NButton, NRadioGroup, NRadioButton, NPagination, NSpace } from 'naive-ui';
 import global from '../var';
 import router from '../router';
 
@@ -56,7 +56,9 @@ function handin() {
                         {{problem}}</n-radio-button>
                 </n-radio-group>
             </div>
-            <n-pagination v-model:page="data.page" :page-count="global.problems.length" class="flex" />
+            <n-space justify="center">
+                <n-pagination v-model:page="data.page" :page-count="global.problems.length" class="flex" />
+            </n-space>
             <n-button @click="handin" size="large">交卷</n-button>
         </div>
     </main>
