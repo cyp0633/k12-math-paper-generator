@@ -25,8 +25,6 @@ const difficulty = [
     },
 ];
 
-var username = "用户名";
-
 onMounted(() => { // 自动切换页面上的时间文字
     var date = new Date();
     var hour = date.getHours();
@@ -44,7 +42,7 @@ function getProblems() {
         alert("请填写完整信息");
         return;
     }
-    if (typeof (data.problemNum) != "number") {
+    if (isNaN(data.problemNum)) { // 判断是否为数字
         alert("题目数量必须为数字");
         return;
     }
@@ -77,10 +75,6 @@ function getProblems() {
             }
         }
     }
-}
-
-function gotoProblems() {
-    $router.push("/problem/1")
 }
 </script>
 
