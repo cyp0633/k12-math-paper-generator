@@ -1,5 +1,5 @@
 <script setup>
-import { NButton, NSpin, NProgress } from 'naive-ui';
+import { NButton, NSpin, NProgress, useMessage } from 'naive-ui';
 import { ref, reactive, onMounted } from 'vue';
 import Global from '../var';
 
@@ -8,9 +8,11 @@ const data = reactive({
     score: 0,
 })
 
+const message = useMessage();
+
 onMounted(() => { // 提交答案，获取成绩
-    if(Global.answers==[]){
-        alert("请先完成试卷");
+    if (Global.answers == []) {
+        message.info("请先完成试卷");
         return;
     }
     var xhr = new XMLHttpRequest();
