@@ -34,7 +34,7 @@ var opPriority = []int{1, 1, 2, 2, 3, 3, 4, 4, 4}
 // GenerateProblem 生成一个表达式树。
 // op 操作数
 // 返回值：生成的表达式
-func GenerateProblem(op,level int) *Expression {
+func GenerateProblem(op, level int) *Expression {
 	var exp Expression
 	var leftOpNum int
 	if op == 0 { // 表达式不含运算符，生成一个数字
@@ -57,18 +57,21 @@ func GenerateProblem(op,level int) *Expression {
 	exp.Operator = genOp(level)
 	switch exp.Operator { // 根据运算符的不同，生成不同的表达式
 	case operatorAdd, operatorSub, operatorMul, operatorDiv: // 二元运算符
-		leftOpNum = GenNum(0, op)                       // 分配 0~op-1 个运算符给左子表达式
-		exp.Left = GenerateProblem(leftOpNum,level)           // 使用递归生成左子表达式
-		exp.Right = GenerateProblem(op - leftOpNum - 1,level) // 使用递归生成右子表达式
+		leftOpNum = GenNum(0, op)                          // 分配 0~op-1 个运算符给左子表达式
+		exp.Left = GenerateProblem(leftOpNum, level)       // 使用递归生成左子表达式
+		exp.Right = GenerateProblem(op-leftOpNum-1, level) // 使用递归生成右子表达式
 	case operatorSqrt, operatorSquare: // 一元运算符，初中难度
 		exp.Left = nil
-		exp.Right = GenerateProblem(op - 1,level) // 使用递归生成右子表达式
+		exp.Right = GenerateProblem(op-1, level) // 使用递归生成右子表达式
+		for exp.Right.Operator == operatorSquare && exp.Operator == operatorSquare {
+			exp.Right = GenerateProblem(op-1, level) // LaTeX 限制无法使用连续的双平方，不生成就可以绕开这一限制
+		}
 		if exp.Level < UserTypeJuniorHigh {
 			exp.Level = UserTypeJuniorHigh
 		}
 	case operatorSin, operatorCos, operatorTan: // 一元运算符，高中难度
 		exp.Left = nil
-		exp.Right = GenerateProblem(op - 1,level) // 使用递归生成右子表达式
+		exp.Right = GenerateProblem(op-1, level) // 使用递归生成右子表达式
 		if exp.Level < UserTypeSeniorHigh {
 			exp.Level = UserTypeSeniorHigh
 		}
