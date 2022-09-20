@@ -22,7 +22,8 @@ var SMSConf = struct {
 
 // ServerConf 配置服务器的端口号等信息。
 var ServerConf = struct {
-	Port string // 服务器端口号
+	Port       string // 服务器端口号
+	CookieAuth string // Cookie Auth Key
 }{}
 
 // InitConf 使用文件夹内的 conf.ini 文件初始化配置。CLI 无需此操作。
@@ -46,5 +47,6 @@ func InitConf() {
 	serverSection := cfg.Section("server")
 	{
 		ServerConf.Port = serverSection.Key("port").String()
+		ServerConf.CookieAuth = serverSection.Key("cookie_auth").String()
 	}
 }

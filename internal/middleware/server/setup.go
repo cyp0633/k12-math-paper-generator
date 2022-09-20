@@ -18,7 +18,7 @@ import (
 func Setup() {
 	r := gin.Default() // 创建 Gin 实例
 
-	store := cookie.NewStore([]byte("secret")) // 使用 cookie 存储 session
+	store := cookie.NewStore([]byte(models.ServerConf.CookieAuth)) // 使用 cookie 存储 session
 
 	// r.StaticFS(path.Join(""), http.FS(frontend.FS)) // 服务静态文件
 	r.Use(cors.New(cors.Config{
@@ -36,8 +36,8 @@ func Setup() {
 
 	r.Use(frontendHandler) // 先经过 handler 判断是否为前端请求
 
-	api := r.Group("/api")                         // 设置 API 路由组
-	api.Use(sessions.Sessions("mysession", store)) // 设置 Gin 中间件
+	api := r.Group("/api")                              // 设置 API 路由组
+	api.Use(sessions.Sessions("k12mathsession", store)) // 设置 Gin 中间件
 
 	api.GET("/ping", func(c *gin.Context) { // 测试 API
 		c.JSON(200, gin.H{
