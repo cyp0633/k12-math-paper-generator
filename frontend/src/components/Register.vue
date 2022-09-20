@@ -1,5 +1,5 @@
 <script setup>
-import { NInput, NButton } from 'naive-ui';
+import { NInput, NButton, useMessage } from 'naive-ui';
 import { reactive, ref } from 'vue';
 import sha256 from 'js-sha256';
 
@@ -9,13 +9,15 @@ const data = reactive({
     password2: ref(null),
 })
 
+const message = useMessage();
+
 function sendVerification() {
     if (data.sent) {
-        alert("阿里云钱不多了，请不要重复发送");
+        message.info("阿里云钱不多了，请不要重复发送");
         return;
     }
     if (data.username == null) {
-        alert("请输入邮箱或手机号");
+        message.error("请输入邮箱或手机号");
         return;
     }
     var xhr = new XMLHttpRequest();
@@ -26,17 +28,17 @@ function sendVerification() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             switch (xhr.status) {
                 case 200:
-                    alert("验证码已发送");
+                    message.success("验证码已发送");
                     data.sent = true;
                     break;
                 case 400:
-                    alert("手机号/邮箱格式错误");
+                    message.error("手机号/邮箱格式错误");
                     break;
                 case 409:
-                    alert("手机号/邮箱已被注册");
+                    message.error("手机号/邮箱已被注册");
                     break;
                 default:
-                    alert("未知错误");
+                    message.error("未知错误");
             }
         }
     }
@@ -70,7 +72,7 @@ function tryRegister() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             switch (xhr.status) {
                 case 200:
-                    alert("注册成功，请登录");
+                    message.success("注册成功，请登录");
                     window.location.href = "/login";
                     break;
                 case 400:

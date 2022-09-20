@@ -1,5 +1,5 @@
 <script setup>
-import { NInput, NButton } from 'naive-ui';
+import { NInput, NButton, useMessage } from 'naive-ui';
 import { reactive, ref } from 'vue';
 import { sha256 } from 'js-sha256';
 import Global from '../var';
@@ -10,6 +10,8 @@ const data = reactive({
     newPassword: ref(null),
     confirmPassword: ref(null),
 });
+
+const message = useMessage();
 
 function changePassword() {
     if (Global.title.loginUser == null) {
@@ -44,15 +46,16 @@ function changePassword() {
             switch (xhr.status) {
                 case 200:
                     alert("修改成功");
+                    message.success("修改成功");
                     break;
                 case 400:
-                    alert("密码格式错误");
+                    message.error("没有登录");
                     break;
                 case 401:
-                    alert("旧密码错误");
+                    message.error("旧密码错误");
                     break;
                 default:
-                    alert("未知错误");
+                    message.error("未知错误");
             }
         }
     }
@@ -70,17 +73,17 @@ function logout() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             switch (xhr.status) {
                 case 200:
-                    alert("注销成功");
+                    message.success("注销成功");
                     Global.title.loginUser = null;
                     Global.textChange();
                     router.replace('/');
                     vm.$forceUpdate();
                     break;
                 case 401:
-                    alert("未登录");
+                    message.error("未登录");
                     break;
                 default:
-                    alert("未知错误");
+                    message.error("未知错误");
             }
         }
     }

@@ -10,6 +10,8 @@ var data = {
 
 const router = useRouter();
 
+const message = useMessage();
+
 // 登录
 function postLogin() {
     var xmlHttp = new XMLHttpRequest();
@@ -24,13 +26,13 @@ function postLogin() {
         if (xmlHttp.readyState == XMLHttpRequest.DONE) { // 等待后期换一个更漂亮的提示框
             const statuscode = xmlHttp.status;
             if (statuscode == 200) {
-                alert("登录成功");
+                message.success("登录成功");
                 var res = JSON.parse(xmlHttp.responseText);
                 Global.title.loginUser = res.user;
                 Global.textChange();
                 window.location.href = '/';
             } else {
-                alert("登录失败");
+                message.error("登录失败");
             }
         }
     }

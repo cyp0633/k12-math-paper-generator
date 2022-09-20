@@ -1,7 +1,7 @@
 <script setup>
 import { watch, onUpdated, onMounted, reactive, ref } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
-import { NDivider } from 'naive-ui';
+import { NDivider, NMessageProvider } from 'naive-ui';
 import Global from './var.js';
 import 'katex/dist/katex.min.css';
 
@@ -73,9 +73,9 @@ watch(() => Global.title.loginUser, async () => {
     </header>
     <main>
         <div class="container mx-auto mt-28 md:mt-16 h-screen ">
-            <!-- <n-notification-provider> -->
-            <RouterView />
-            <!-- </n-notification-provider> -->
+            <n-message-provider>
+                <RouterView />
+            </n-message-provider>
         </div>
     </main>
     <footer>

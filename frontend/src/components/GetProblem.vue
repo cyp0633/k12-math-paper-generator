@@ -1,5 +1,5 @@
 <script setup>
-import { NRadioGroup, NRadioButton, NSpace, NInput, NButton } from 'naive-ui';
+import { NRadioGroup, NRadioButton, NSpace, NInput, NButton, useMessage } from 'naive-ui';
 import { RouterLink, RouterView, useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import global from '../var'
@@ -9,6 +9,8 @@ const data = {
 };
 
 const router = useRouter();
+
+const message = useMessage();
 
 const difficulty = [
     {
@@ -60,7 +62,7 @@ function getProblems() {
                 var res = JSON.parse(xhr.responseText);
                 global.problems = res.data;
                 if (res.code == 0) {
-                    alert("生成试卷成功");
+                    message.success("生成试卷成功");
                     var i = ref(0);
                     global.answers = []; // 清理答案数组
                     for (i = 0; i < global.problems.length; i++) { // 初始化答案均为 NaN
@@ -68,10 +70,10 @@ function getProblems() {
                     }
                     router.push('/problem/1');
                 } else {
-                    alert("生成试卷失败");
+                    message.error("生成试卷失败");
                 }
             } else {
-                alert("生成试卷失败");
+                message.error("生成试卷失败");
             }
         }
     }

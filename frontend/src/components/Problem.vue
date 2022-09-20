@@ -1,13 +1,15 @@
 <script setup>
 import { watch, ref, onUpdated, reactive } from 'vue';
 import { useRoute } from 'vue-router';
-import { NButton, NRadioGroup, NRadioButton, NPagination, NSpace } from 'naive-ui';
+import { NButton, NRadioGroup, NRadioButton, NPagination, NSpace, useMessage } from 'naive-ui';
 import global from '../var';
 import router from '../router';
 
 const route = useRoute();
 
 var id = reactive(route.params.id);
+
+const message = useMessage();
 
 const data = reactive({
     id: ref(id),
@@ -28,7 +30,7 @@ function handin() {
     var i = 0;
     for (i = 0; i < global.problems.length; i++) {
         if (global.answers[i] == NaN && data.insist == 0) {
-            alert("未完成所有题目，如坚持交卷，请再次点击交卷");
+            message.info("未完成所有题目，如坚持交卷，请再次点击交卷");
             data.insist = 1;
             return;
         }
