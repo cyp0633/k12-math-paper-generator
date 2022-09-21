@@ -8,7 +8,7 @@ import (
 	"math/big"
 )
 
-// genNum 在 [0, max) 内生成一个随机数.
+// genNum 在 [min, max) 内生成一个随机数.
 func GenNum(min, max int) int {
 	val, err := rand.Int(rand.Reader, big.NewInt(int64(max-min)))
 	if err != nil {

@@ -30,7 +30,7 @@ func (s *JudgeService) Judge(c *gin.Context) {
 			score += 1.0
 		}
 	}
-	score = score / float64(len(ans)) * 100.0
+	score = setPrecision(score/float64(len(ans))*100.0, 2)
 	c.JSON(http.StatusOK, gin.H{
 		"code":  0,
 		"score": score,

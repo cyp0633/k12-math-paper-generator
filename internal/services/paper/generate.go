@@ -48,13 +48,14 @@ func (s *GetPaperService) GetPaper(c *gin.Context) {
 			problem = models.GenerateProblem(models.GenNum(1, 6), s.Level)
 		}
 		str := models.GenerateProblemStr(problem)
+		problem.Value = setPrecision(problem.Value, 2) // 保留两位小数，防止用户容易分辨答案
 		if models.CheckDupProblem(str, user) {
 			continue
 		}
 		l = str
 		models.WriteProblemToDb(str, problem.Value, user)
 		for j := 0; j < 4; j++ {
-			o[j] = float64(models.GenNum(1, 100000) / 1000.0) // 随机生成选项数字
+			o[j] = setPrecision(float64(models.GenNum(-200, 200))/100.0+problem.Value, 2) // 在正确答案+=-2.00的范围内随机生成选项
 		}
 		o[models.GenNum(0, 3)] = problem.Value // 随机将答案放入选项中
 		var p = problemPost{
@@ -69,4 +70,10 @@ func (s *GetPaperService) GetPaper(c *gin.Context) {
 		"msg":  "success",
 		"data": pSet,
 	})
+}
+
+// setPrecision 用于将浮点数保留指定位小数。
+func setPrecision(f float64, n int) float64 {
+	pow10_n := math.Pow10(n)
+	return math.Trunc((f+0.5/pow10_n)*pow10_n) / pow10_n
 }
