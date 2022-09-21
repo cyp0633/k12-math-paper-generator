@@ -38,6 +38,12 @@ function sendVerification() {
                 case 409:
                     message.error("手机号/邮箱已被注册");
                     break;
+                case 500:
+                    dialog.error({
+                        title: "验证码发送失败",
+                        content: "请检查邮箱/手机号是否正确\n特别注意：未在阿里云登记过的手机号无法接收验证码",
+                        negativeText: "好",
+                    })
                 default:
                     message.error("未知错误");
             }
