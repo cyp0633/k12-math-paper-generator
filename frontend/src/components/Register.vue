@@ -1,5 +1,5 @@
 <script setup>
-import { NInput, NButton, useMessage } from 'naive-ui';
+import { NInput, NButton, useMessage, useDialog } from 'naive-ui';
 import { reactive, ref } from 'vue';
 import sha256 from 'js-sha256';
 
@@ -10,6 +10,7 @@ const data = reactive({
 })
 
 const message = useMessage();
+const dialog = useDialog();
 
 function sendVerification() {
     if (data.sent) {
@@ -46,20 +47,36 @@ function sendVerification() {
 
 function tryRegister() {
     if (!data.sent) {
-        alert("请先发送验证码");
+        dialog.warning({
+            title: "未发送验证码",
+            content: "请先发送验证码",
+            negativeText: "好",
+        })
         return;
     }
-    if (data.username == null || data.verification == null || data.password == null) {
-        alert("请填写完整信息");
+    if (data.username == null || data.verification == null || data.password == null || data.password2 == null) {
+        dialog.error({
+            title: "信息不完整",
+            content: "请填写用户名、验证码和两次确认密码",
+            negativeText: "好",
+        })
         return;
     }
     if (data.password != data.password2) {
-        alert("两次密码不一致");
+        dialog.error({
+            title: "两次密码不一致",
+            content: "请重新输入",
+            negativeText: "好",
+        })
         return;
     }
     var format = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{6,10}$/.test(data.password);
     if (!format) {
-        alert("密码格式错误");
+        dialog.error({
+            title: "密码格式错误",
+            content: "密码必须包含大小写字母和数字，长度为6-10位",
+            negativeText: "好",
+        })
         return;
     }
     var xhr = new XMLHttpRequest();
@@ -76,10 +93,14 @@ function tryRegister() {
                     window.location.href = "/login";
                     break;
                 case 400:
-                    alert("验证码错误");
+                    dialog.error({
+                        title: "验证码错误",
+                        content: "请重新输入",
+                        negativeText: "好",
+                    })
                     break;
                 default:
-                    alert("未知错误");
+                    message.error("未知错误");
             }
         }
     }

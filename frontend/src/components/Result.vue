@@ -1,5 +1,5 @@
 <script setup>
-import { NButton, NSpin, NProgress, useMessage } from 'naive-ui';
+import { NButton, NSpin, NProgress, useMessage, useDialog } from 'naive-ui';
 import { reactive, onMounted } from 'vue';
 import Global from '../var';
 
@@ -9,6 +9,7 @@ const data = reactive({
 })
 
 const message = useMessage();
+const dialog = useDialog();
 
 onMounted(() => { // 提交答案，获取成绩
     if (Global.answers == []) {
@@ -29,7 +30,11 @@ onMounted(() => { // 提交答案，获取成绩
                 Global.answers = [];
             }
             else {
-                alert("提交失败");
+                dialog.error({
+                    title: "未知错误",
+                    content: "请联系管理员",
+                    negativeText: "好",
+                })
             }
         }
     }

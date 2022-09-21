@@ -1,5 +1,5 @@
 <script setup>
-import { NRadioGroup, NRadioButton, NSpace, NInput, NButton, useMessage } from 'naive-ui';
+import { NRadioGroup, NRadioButton, NSpace, NInput, useMessage, useDialog } from 'naive-ui';
 import { useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import global from '../var'
@@ -9,8 +9,8 @@ const data = {
 };
 
 const router = useRouter();
-
 const message = useMessage();
+const dialog = useDialog();
 
 const difficulty = [
     {
@@ -28,6 +28,19 @@ const difficulty = [
 ];
 
 onMounted(() => { // 自动切换页面上的时间文字
+    if (global.title.loginUser == null) {
+        dialog.warning({
+            title: "请先登录",
+            content: "抱歉，需要登录才能做题",
+            negativeText: "好",
+            onNegativeClick: () => {
+                router.push("/login");
+            },
+            onMaskClick: () => {
+                router.push("/login");
+            }
+        })
+    }
     var date = new Date();
     var hour = date.getHours();
     if (hour >= 0 && hour < 12) {
@@ -41,15 +54,27 @@ onMounted(() => { // 自动切换页面上的时间文字
 
 function getProblems() {
     if (data.difficulty == null || data.problemNum == null) {
-        alert("请填写完整信息");
+        dialog.warning({
+            title: "信息不完整",
+            content: "请选择难度和题目数量",
+            negativeText: "好",
+        })
         return;
     }
     if (isNaN(data.problemNum)) { // 判断是否为数字
-        alert("题目数量必须为数字");
+        dialog.warning({
+            title: "信息不完整",
+            content: "题目数量必须为数字",
+            negativeText: "好",
+        })
         return;
     }
     if (data.problemNum < 10 || data.problemNum > 30) {
-        alert("题目数量必须在 10 与 30 之间");
+        dialog.warning({
+            title: "信息不完整",
+            content: "题目数量应在 10 与 30 之间",
+            negativeText: "好",
+        })
         return;
     }
     var params = "level=" + data.difficulty + "&num=" + data.problemNum;

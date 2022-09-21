@@ -1,7 +1,7 @@
 <script setup>
-import { watch, ref, onUpdated, reactive } from 'vue';
+import { watch, ref, onUpdated, reactive, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { NButton, NRadioGroup, NRadioButton, NPagination, NSpace, useMessage } from 'naive-ui';
+import { NButton, NRadioGroup, NRadioButton, NPagination, NSpace, useMessage, useDialog } from 'naive-ui';
 import global from '../var';
 import router from '../router';
 
@@ -10,6 +10,7 @@ const route = useRoute();
 var id = reactive(route.params.id);
 
 const message = useMessage();
+const dialog = useDialog();
 
 const data = reactive({
     id: ref(id),
@@ -25,6 +26,22 @@ watch(() => data.page,
         router.replace('/problem/' + newPage)
         data.id = newPage
     })
+
+onMounted(() => {
+    if (global.title.loginUser == null) {
+        dialog.warning({
+            title: "请先登录",
+            content: "抱歉，需要登录才能做题",
+            negativeText: "好",
+            onNegativeClick: () => {
+                router.push("/login");
+            },
+            onMaskClick: () => {
+                router.push("/login");
+            }
+        })
+    }
+})
 
 function handin() {
     var i = 0;

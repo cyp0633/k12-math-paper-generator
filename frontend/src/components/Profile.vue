@@ -1,6 +1,6 @@
 <script setup>
-import { NInput, NButton, useMessage } from 'naive-ui';
-import { reactive, ref } from 'vue';
+import { NInput, NButton, useMessage, useDialog } from 'naive-ui';
+import { reactive, ref, onMounted } from 'vue';
 import { sha256 } from 'js-sha256';
 import Global from '../var';
 import router from '../router';
@@ -11,24 +11,54 @@ const data = reactive({
     confirmPassword: ref(null),
 });
 
+onMounted(() => {
+    if (Global.title.loginUser == null) {
+        dialog.warning({
+            title: "请先登录",
+            content: "你不登录，怎么知道你要修改什么呢？",
+            negativeText: "好",
+            onNegativeClick: () => {
+                router.push("/login");
+            }
+        })
+    }
+});
+
 const message = useMessage();
+const dialog = useDialog();
 
 function changePassword() {
     if (Global.title.loginUser == null) {
-        alert("请先登录");
+        dialog.warning({
+            title: "未登录",
+            content: "请先登录",
+            negativeText: "好",
+        })
         return;
     }
     if (data.newPassword == null || data.confirmPassword == null || data.oldPassword == null) {
-        alert("请填写完整信息");
+        dialog.warning({
+            title: "信息不完整",
+            content: "请填写完整信息",
+            negativeText: "好",
+        })
         return;
     }
     if (data.newPassword != data.confirmPassword) {
-        alert("两次输入的密码不一致");
+        dialog.warning({
+            title: "信息不完整",
+            content: "两次输入的密码不一致",
+            negativeText: "好",
+        })
         return;
     }
     var format = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{6,10}$/.test(data.newPassword)
     if (!format) {
-        alert("新密码格式错误");
+        dialog.warning({
+            title: "密码格式错误",
+            content: "密码必须包含大小写字母和数字，长度为6-10位",
+            negativeText: "好",
+        })
         return;
     }
     var xhr = new XMLHttpRequest();
@@ -45,7 +75,6 @@ function changePassword() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             switch (xhr.status) {
                 case 200:
-                    alert("修改成功");
                     message.success("修改成功");
                     break;
                 case 400:
@@ -63,7 +92,11 @@ function changePassword() {
 
 function logout() {
     if (Global.title.loginUser == null) {
-        alert("请先登录");
+        dialog.warning({
+            title: "未登录",
+            content: "请先登录",
+            negativeText: "好",
+        })
         return;
     }
     var xhr = new XMLHttpRequest();
