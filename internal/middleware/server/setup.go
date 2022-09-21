@@ -79,7 +79,11 @@ func frontendHandler(c *gin.Context) {
 		c.Next()
 		return
 	}
-	// 返回 frontend.FS 中的文件
-	c.FileFromFS(c.Request.URL.Path, http.FS(frontend.FS))
+	_, err := http.FS(frontend.FS).Open(c.Request.URL.Path) // 判断文件是否存在
+	if err != nil {
+		c.Redirect(http.StatusMovedPermanently, "/") // 不存在则返回主页
+		return
+	}
+	c.FileFromFS(c.Request.URL.Path, http.FS(frontend.FS)) // 非 API 请求且文件存在，返回前端页面
 	c.Abort()
 }
