@@ -1,12 +1,12 @@
 <script setup>
 import { NRadioGroup, NRadioButton, NSpace, NInput, useMessage, useDialog } from 'naive-ui';
 import { useRouter } from 'vue-router';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, reactive } from 'vue';
 import global from '../var'
 
-const data = {
+const data = reactive({
     timestr: "上午"
-};
+});
 
 const router = useRouter();
 const message = useMessage();
