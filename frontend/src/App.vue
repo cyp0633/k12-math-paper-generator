@@ -1,15 +1,9 @@
 <script setup>
-import { watch, onUpdated, onMounted, reactive, ref } from 'vue';
+import { watch, onUpdated, onMounted } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
 import { NDivider, NMessageProvider } from 'naive-ui';
 import Global from './var.js';
 import 'katex/dist/katex.min.css';
-
-// const data = reactive({
-//     text: ref("未登录，点击登录"),
-//     to: ref("/login"),
-//     showRegister: ref(true),
-// })
 
 onMounted(() => {
     var xhr = new XMLHttpRequest();
@@ -73,12 +67,14 @@ watch(() => Global.title.loginUser, async () => {
     </header>
     <main>
         <div id="mainframe" class="min-h-screen py-16 ">
-            <div class="container mx-auto mt-28 md:mt-16 pt-16 pb-8 acrylic">
+            <div class="container mx-auto mt-28 md:mt-20 pt-24 pb-8 acrylic">
                 <n-message-provider>
                     <RouterView />
                 </n-message-provider>
                 <n-divider />
-                <RouterLink to="/opensource" class="float-right m-3">开放源代码声明</RouterLink>
+                <div class="text-center">
+                    <RouterLink to="/opensource" class="pt-10 m-3">开放源代码声明</RouterLink>
+                </div>
             </div>
         </div>
     </main>
@@ -88,7 +84,7 @@ watch(() => Global.title.loginUser, async () => {
 @import "../node_modules/katex/dist/katex.min.css";
 
 #mainframe {
-    background-image: url(./assets/catalina.jpg);
+    background-image: url(./assets/bg.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -108,13 +104,4 @@ watch(() => Global.title.loginUser, async () => {
     background-repeat: repeat;
     box-shadow: 0px 25.6px 57.6px rgb(0 0 0 / 14%), 0px 0px 16.4px rgb(0 0 0 / 12%);
 }
-
-/* set the background image of the whole website to ./assets/catalina.jpg */
-/* * {
-    background-image: url(./assets/catalina.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-} */
 </style>

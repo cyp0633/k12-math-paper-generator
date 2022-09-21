@@ -91,7 +91,7 @@ function logout() {
 </script>
 
 <template>
-    <div class="container mx-auto text-center w-4/6 space-y-10 pt-20">
+    <div class="container mx-auto text-center w-4/6 space-y-10">
         <h1 class="text-5xl">
             个人中心
         </h1>

@@ -1,6 +1,6 @@
 <script setup>
 import { NRadioGroup, NRadioButton, NSpace, NInput, NButton, useMessage } from 'naive-ui';
-import { RouterLink, RouterView, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import global from '../var'
 
@@ -82,7 +82,7 @@ function getProblems() {
 
 <template>
     <main>
-        <div class="container mx-auto text-center w-4/6 space-y-6 pt-20">
+        <div class="container mx-auto text-center w-4/6 space-y-6">
             <h1 class="font-sans font-bold text-5xl">{{data.timestr}}好，{{global.title.loginUser}}!</h1>
             <h1 class="font-sans font-medium text-3xl">请选择您的题目等级与数量</h1>
             <div class="space-y-2">

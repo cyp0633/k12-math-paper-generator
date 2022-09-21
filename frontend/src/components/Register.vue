@@ -89,7 +89,7 @@ function tryRegister() {
 <template>
     <main>
         <main>
-            <div class="container mx-auto text-center w-2/6 space-y-6 pt-20">
+            <div class="container mx-auto text-center w-2/6 space-y-6">
                 <h1 class="font-sans font-medium text-5xl">注册</h1>
                 <p class="font-size-xl">请输入您的手机号或邮箱，我们会将验证码发送到此处。<br>密码需同时包含大、小写字母以及数字，长度 6-10
                     位。<br>短信服务仅限对应账户的测试手机号使用，其他情况请输入邮箱。</p>

@@ -1,10 +1,10 @@
 <script setup>
-import { NH1, NH2, NH3, NA } from 'naive-ui';
+import { NH2, NH3, NA } from 'naive-ui';
 </script>
 
 <template>
-    <div class="container mx-auto space-y-6 pt-10">
-        <n-h1 prefix="bar">开放源代码声明</n-h1>
+    <div class="container mx-auto space-y-6 px-16">
+        <h1 class="text-center text-4xl">开放源代码声明</h1>
         <div class="container mx-auto space-y-2">
             <n-h2 prefix="bar">本项目</n-h2>
             <p>本软件在 MIT 协议下开源，源代码地址：<n-a href="https://github.com/cyp0633/k12-math-paper-generator">GitHub</n-a>

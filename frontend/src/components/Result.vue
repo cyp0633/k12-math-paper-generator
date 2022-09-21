@@ -1,6 +1,6 @@
 <script setup>
 import { NButton, NSpin, NProgress, useMessage } from 'naive-ui';
-import { ref, reactive, onMounted } from 'vue';
+import { reactive, onMounted } from 'vue';
 import Global from '../var';
 
 const data = reactive({
@@ -38,7 +38,7 @@ onMounted(() => { // 提交答案，获取成绩
 
 <template>
     <main>
-        <div class="container mx-auto text-center space-y-6 pt-20">
+        <div class="container mx-auto text-center space-y-6">
             <div v-show="data.seen" class="space-y-2">
                 <n-spin size="large" />
                 <p class="text-lg">正在提交答案并获取结果</p>

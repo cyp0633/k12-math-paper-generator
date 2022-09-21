@@ -1,11 +1,11 @@
 <script setup>
-import { NH1, NButton } from 'naive-ui'
+import { NButton } from 'naive-ui'
 import Global from '../var'
 </script>
 
 <template>
     <main>
-        <div class="container mx-auto text-center pt-40 space-y-7">
+        <div class="container mx-auto text-center space-y-7 pt-10">
             <h1
                 class="font-sans font-extrabold text-7xl text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
                 欢迎使用数学学习平台</h1>
