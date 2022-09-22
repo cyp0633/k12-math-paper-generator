@@ -45,7 +45,7 @@ function postLogin() {
             <h1 class="font-sans font-medium text-5xl">登录</h1>
             <div class="space-y-2">
                 <n-input v-model:value="data.loginForm.username" type="text" placeholder="手机号/邮箱" />
-                <n-input v-model:value="data.rawPassword" type="password" placeholder="密码" />
+                <n-input v-model:value="data.rawPassword" type="password" placeholder="密码" @keydown.enter="postLogin" />
             </div>
             <n-button @click="postLogin">登录</n-button>
         </div>

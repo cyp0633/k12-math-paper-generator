@@ -123,7 +123,8 @@ function tryRegister() {
                 <div class="space-y-2">
                     <n-input v-model:value="data.username" type="text" placeholder="手机号/邮箱" />
                     <div class="flex space-x-2">
-                        <n-input v-model:value="data.verification" type="text" placeholder="验证码" />
+                        <n-input v-model:value="data.verification" type="text" placeholder="验证码"
+                            @keydown.enter="sendVerification" />
                         <n-button class="flex w-2/6" @click="sendVerification">发送验证码</n-button>
                     </div>
                 </div>
@@ -131,7 +132,7 @@ function tryRegister() {
                     <n-input v-model:value="data.password" type="password" show-password-on="mousedown"
                         placeholder="密码" />
                     <n-input v-model:value="data.password2" type="password" show-password-on="mousedown"
-                        placeholder="确认密码" />
+                        placeholder="确认密码" @keydown.enter="tryRegister" />
                 </div>
                 <n-button @click="tryRegister" size="large">注册</n-button>
             </div>
