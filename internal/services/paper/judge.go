@@ -31,6 +31,8 @@ func (s *JudgeService) Judge(c *gin.Context) {
 		}
 	}
 	score = setPrecision(score/float64(len(ans))*100.0, 2)
+	u := models.GetUserByName(usr)
+	u.AddProblemRecord(len(ans), int(score))
 	c.JSON(http.StatusOK, gin.H{
 		"code":  0,
 		"score": score,
