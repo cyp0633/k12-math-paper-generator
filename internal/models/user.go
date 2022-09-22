@@ -10,10 +10,12 @@ import (
 // 用户模型，用于存储用户信息。
 type User struct {
 	gorm.Model
-	AccountType int    // 账号类型
-	Username    string // 用户名，结对项目中是手机号
-	Password    string // 密码，此处经过 SHA256 加密
-	Note        string // 备注，服务端中用于手机验证码
+	AccountType    int    // 账号类型
+	Username       string // 用户名，结对项目中是手机号
+	Password       string // 密码，此处经过 SHA256 加密
+	Note           string // 备注，服务端中用于手机验证码
+	ProblemDone    int    // 已完成的题目数量
+	ProblemCorrect int    // 已完成的正确题目数量
 }
 
 // 用户类型枚举。
@@ -137,4 +139,31 @@ func CreateUser(phone string, code int) bool {
 	}
 	log.Printf("CreateUser success:%v", user)
 	return true
+}
+
+// AddProblemRecord 添加一条做题记录。
+func (a User) AddProblemRecord(total, correct int) bool {
+	// result := DB.Model(&a).Update("problem_done", gorm.Expr("problem_done + ?", total))
+	// if result.Error != nil {
+	// 	log.Printf("AddProblemRecord error:%v", result.Error)
+	// 	return false
+	// }
+	// result = DB.Model(&a).Update("problem_correct", gorm.Expr("problem_correct + ?", correct))
+	// if result.Error != nil {
+	// 	log.Printf("AddProblemRecord error:%v", result.Error)
+	// 	return false
+	// }
+	a.ProblemCorrect += correct
+	a.ProblemDone += total
+	result := DB.Save(&a)
+	if result.Error != nil {
+		log.Printf("AddProblemRecord error:%v", result.Error)
+		return false
+	}
+	return true
+}
+
+// ProblemRecord 获取用户做题记录。
+func (a User) ProblemRecord() (total, correct int, ok bool) {
+	return a.ProblemDone, a.ProblemCorrect, true
 }

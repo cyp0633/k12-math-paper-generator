@@ -92,3 +92,8 @@ func auth(c *gin.Context) {
 	}
 	c.Set("user", user)
 }
+
+// getStats 获取用户做题统计数据。
+func getStats(c *gin.Context) {
+	user.GetProblemStats(c)
+}

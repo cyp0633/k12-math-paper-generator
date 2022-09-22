@@ -60,6 +60,7 @@ func Setup() {
 	api.POST("/user/session", login)          // 登录
 	api.DELETE("/user/session", auth, logout) // 登出
 	api.PATCH("/user", auth, changePswd)      // 修改密码
+	api.GET("/user/stats", auth, getStats)    // 获取做题统计
 
 	// 试卷相关路由
 	api.GET("/paper", auth, getPaper) // 获取试卷
