@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetProblemStats 获取用户做题统计数据。
 func GetProblemStats(c *gin.Context) {
 	usr := c.GetString("user")
 	u := models.GetUserByName(usr)
