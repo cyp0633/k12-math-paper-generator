@@ -92,3 +92,7 @@ func auth(c *gin.Context) {
 	}
 	c.Set("user", user)
 }
+
+func getStats(c *gin.Context) {
+	user.GetProblemStats(c)
+}

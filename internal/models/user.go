@@ -157,7 +157,7 @@ func (a User) AddProblemRecord(total, correct int) bool {
 }
 
 // ProblemRecord 获取用户做题记录。
-func (a User) ProblemRecord() (total, correct int) {
+func (a User) ProblemRecord() (total, correct int, ok bool) {
 	result := DB.Model(&a).Select("problem_done, problem_correct").First(&a)
 	if result.Error != nil {
 		log.Printf("ProblemRecord error:%v", result.Error)
