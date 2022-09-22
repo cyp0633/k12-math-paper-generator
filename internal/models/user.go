@@ -143,12 +143,19 @@ func CreateUser(phone string, code int) bool {
 
 // AddProblemRecord 添加一条做题记录。
 func (a User) AddProblemRecord(total, correct int) bool {
-	result := DB.Model(&a).Update("total", gorm.Expr("total + ?", total))
-	if result.Error != nil {
-		log.Printf("AddProblemRecord error:%v", result.Error)
-		return false
-	}
-	result = DB.Model(&a).Update("correct", gorm.Expr("correct + ?", correct))
+	// result := DB.Model(&a).Update("problem_done", gorm.Expr("problem_done + ?", total))
+	// if result.Error != nil {
+	// 	log.Printf("AddProblemRecord error:%v", result.Error)
+	// 	return false
+	// }
+	// result = DB.Model(&a).Update("problem_correct", gorm.Expr("problem_correct + ?", correct))
+	// if result.Error != nil {
+	// 	log.Printf("AddProblemRecord error:%v", result.Error)
+	// 	return false
+	// }
+	a.ProblemCorrect += correct
+	a.ProblemDone += total
+	result := DB.Save(&a)
 	if result.Error != nil {
 		log.Printf("AddProblemRecord error:%v", result.Error)
 		return false
